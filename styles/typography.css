@@ -1,0 +1,41 @@
+/* styles/typography.css */
+
+.text-hero {
+  font-size: clamp(3.5rem, 9vw, 9rem);
+  font-family: var(--font-display), sans-serif;
+  font-weight: 800;
+  line-height: 0.95;
+  letter-spacing: -0.03em;
+}
+
+.text-title {
+  font-size: clamp(2rem, 4.5vw, 4.5rem);
+  font-family: var(--font-display), sans-serif;
+  font-weight: 600;
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+}
+
+.text-section {
+  font-size: clamp(1rem, 1.5vw, 1.125rem);
+  font-family: var(--font-body), sans-serif;
+  line-height: 1.7;
+}
+
+.text-mono {
+  font-size: clamp(0.75rem, 1.1vw, 0.9rem);
+  font-family: var(--font-mono), monospace;
+  letter-spacing: 0.05em;
+}
+
+.text-label {
+  font-size: 0.75rem;
+  font-family: var(--font-mono), monospace;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.font-editorial {
+  font-family: var(--font-editorial), Georgia, serif;
+  font-style: italic;
+}
