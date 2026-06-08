@@ -17,7 +17,7 @@ export interface SkillLink {
 
 const DOMAIN_COLORS = {
   frontend: "#5DADE2", // cool blue
-  backend: "#C8FA5F",  // chartreuse
+  backend: "#FF3E3E",  // premium red
   design: "#FF8C42",   // warm orange
   devops: "#A66CFF",   // light purple
 } as const;

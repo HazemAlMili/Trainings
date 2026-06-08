@@ -33,7 +33,7 @@ export default function WebGLScene() {
     // ── GEOMETRY & MATERIAL (Premium Metallic Torus Knot) ──
     const geometry = new THREE.TorusKnotGeometry(1.0, 0.3, 150, 20, 2, 3);
     const material = new THREE.MeshPhysicalMaterial({
-      color: 0xc8fa5f,
+      color: 0xff3e3e,
       metalness: 0.9,
       roughness: 0.1,
       clearcoat: 1.0,
@@ -48,7 +48,7 @@ export default function WebGLScene() {
     const ambientLight = new THREE.AmbientLight(0x0a0c10, 1.5);
     scene.add(ambientLight);
 
-    const light1 = new THREE.PointLight(0xc8fa5f, 12, 15);
+    const light1 = new THREE.PointLight(0xff3e3e, 12, 15);
     light1.position.set(2, 3, 2);
     scene.add(light1);
 

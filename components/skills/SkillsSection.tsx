@@ -69,7 +69,7 @@ export function SkillsSection() {
             <span>FRONTEND</span>
           </div>
           <div className="flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-[#C8FA5F]" />
+            <span className="w-2 h-2 rounded-full bg-[#FF3E3E]" />
             <span>BACKEND</span>
           </div>
           <div className="flex items-center gap-2">

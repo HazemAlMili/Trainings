@@ -10,8 +10,8 @@
   --c-border:      rgba(255,255,255,0.07); /* Glass borders */
 
   /* ── SIGNAL COLORS ── */
-  --c-signal:      #C8FA5F;   /* Electric chartreuse — THE accent */
-  --c-signal-dim:  rgba(200,250,95,0.15); /* Glow halo color */
+  --c-signal:      #FF3E3E;   /* Premium electric red — THE accent */
+  --c-signal-dim:  rgba(255,62,62,0.15); /* Glow halo color */
   --c-warm:        #FF8C42;   /* Warm amber — "designer" frequency */
   --c-cool:        #5DADE2;   /* Crystalline blue — "engineer" frequency */
 
