@@ -1,0 +1,105 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-bg-base: #F7F9F6;
+  --color-surface: #EAF1F2;
+  --color-surface-card: #FFFFFF;
+  --color-brand-primary: #118F86;
+  --color-brand-primary-hover: #0E736C;
+  --color-brand-primary-light: #E8F5F4;
+  --color-brand-dark: #16344B;
+  --color-brand-ink: #132B36;
+  --color-brand-muted: #566974;
+  --color-brand-accent: #FFC77A;
+  --color-brand-accent-hover: #E5A54F;
+  --border-radius-card: 18px;
+  --border-radius-pill: 9999px;
+  --border-radius-button: 14px;
+  --font-family-arabic: 'IBM Plex Sans Arabic', 'Tajawal', system-ui, sans-serif;
+  --shadow-elevation: 0 4px 20px -2px rgba(22, 52, 75, 0.06);
+  --shadow-elevation-hover: 0 12px 32px -4px rgba(22, 52, 75, 0.12);
+}
+
+/* Direction B Token Overrides */
+[data-brand-direction="B"] {
+  --color-bg-base: #F4F6F4;
+  --color-surface: #E2EAEB;
+  --color-surface-card: #FFFFFF;
+  --color-brand-primary: #0C9E8E;
+  --color-brand-primary-hover: #097B6F;
+  --color-brand-primary-light: #E3F8F5;
+  --color-brand-dark: #0B2230;
+  --color-brand-ink: #0F1E28;
+  --color-brand-muted: #4F6370;
+  --color-brand-accent: #F4B255;
+  --color-brand-accent-hover: #DC9A3D;
+  --border-radius-card: 12px;
+  --border-radius-pill: 8px;
+  --border-radius-button: 8px;
+  --shadow-elevation: 0 2px 10px rgba(11, 34, 48, 0.08);
+  --shadow-elevation-hover: 0 8px 24px rgba(11, 34, 48, 0.15);
+}
+
+/* Direction C Token Overrides */
+[data-brand-direction="C"] {
+  --color-bg-base: #FAF8F4;
+  --color-surface: #EFE9DE;
+  --color-surface-card: #FFFFFF;
+  --color-brand-primary: #2E8B7B;
+  --color-brand-primary-hover: #22695D;
+  --color-brand-primary-light: #E9F4F1;
+  --color-brand-dark: #1F3746;
+  --color-brand-ink: #1B2932;
+  --color-brand-muted: #5C6E76;
+  --color-brand-accent: #EAA844;
+  --color-brand-accent-hover: #CD8E32;
+  --border-radius-card: 24px;
+  --border-radius-pill: 9999px;
+  --border-radius-button: 18px;
+  --shadow-elevation: 0 6px 24px -4px rgba(31, 55, 70, 0.07);
+  --shadow-elevation-hover: 0 16px 36px -6px rgba(31, 55, 70, 0.14);
+}
+
+body {
+  font-family: var(--font-family-arabic);
+  background-color: var(--color-bg-base);
+  color: var(--color-brand-ink);
+  direction: rtl;
+  text-align: right;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Accessible focus ring */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 3px solid #118F86;
+  outline-offset: 3px;
+}
+
+/* Ensure 44px min tap targets on mobile */
+.tap-target-min {
+  min-height: 44px;
+  min-width: 44px;
+}
+
+/* Custom subtle scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #F1F4F1;
+}
+::-webkit-scrollbar-thumb {
+  background: #CBD5E1;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94A3B8;
+}
+
