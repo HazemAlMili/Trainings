@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { ConversationalArcBackground } from '../components/common/BrandMotif';
+import { ConversationalArcBackground, SectionWaveDivider } from '../components/common/BrandMotif';
 import { LanguageCode, LearnerAudience } from '../types';
 import { Sparkles, CheckCircle2, ChevronDown, ArrowRight, Clock, Users, ShieldCheck } from 'lucide-react';
 
@@ -186,7 +186,7 @@ export const LanguagesPage: React.FC<LanguagesPageProps> = ({ onOpenTrialModal }
       </div>
 
       {/* Hero */}
-      <section className="relative pt-12 pb-16 md:pt-16 md:pb-24 bg-[#F7F9F6] border-b border-slate-200">
+      <section className="relative pt-12 pb-16 md:pt-16 md:pb-24 bg-[#F7F9F6]">
         <ConversationalArcBackground opacity={0.12} />
 
         <div className="max-w-5xl mx-auto px-4 sm:px-6 relative z-10 text-center">
@@ -253,8 +253,10 @@ export const LanguagesPage: React.FC<LanguagesPageProps> = ({ onOpenTrialModal }
         </div>
       </section>
 
+      <SectionWaveDivider fillColor="#FFFFFF" accentStroke="#118F86" heightClass="h-8 sm:h-12" />
+
       {/* Dynamic Tab Outcomes & Cards */}
-      <section className="py-16 md:py-20 bg-white border-b border-slate-200">
+      <section className="py-16 md:py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="text-center max-w-2xl mx-auto mb-12">
             <h2 className="text-2xl sm:text-3xl font-bold text-[#16344B]">
@@ -287,6 +289,8 @@ export const LanguagesPage: React.FC<LanguagesPageProps> = ({ onOpenTrialModal }
           </div>
         </div>
       </section>
+
+      <SectionWaveDivider fillColor="#F7F9F6" accentStroke="#FFC77A" heightClass="h-8 sm:h-12" />
 
       {/* FAQs for this language */}
       <section className="py-16 md:py-20 bg-[#F7F9F6]">

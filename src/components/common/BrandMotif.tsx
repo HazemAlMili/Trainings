@@ -116,6 +116,54 @@ export const ConversationalArcBackground: React.FC<{ className?: string; opacity
 };
 
 /**
+ * Organic Wave Section Divider for seamless visual continuity
+ */
+export const SectionWaveDivider: React.FC<{
+  fillColor?: string;
+  accentStroke?: string;
+  inverted?: boolean;
+  className?: string;
+  heightClass?: string;
+}> = ({
+  fillColor = '#FFFFFF',
+  accentStroke = 'transparent',
+  inverted = false,
+  className = '',
+  heightClass = 'h-10 sm:h-14 md:h-20',
+}) => {
+  return (
+    <div
+      className={`w-full overflow-hidden leading-none pointer-events-none select-none relative z-10 ${
+        inverted ? 'rotate-180 -mb-px' : '-mt-px'
+      } ${className}`}
+      aria-hidden="true"
+    >
+      <svg
+        className={`w-full ${heightClass} object-cover`}
+        viewBox="0 0 1440 96"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+        preserveAspectRatio="none"
+      >
+        <path
+          d="M0 48C240 88 480 96 720 72C960 48 1200 16 1440 48V96H0V48Z"
+          fill={fillColor}
+        />
+        {accentStroke !== 'transparent' && (
+          <path
+            d="M0 48C240 88 480 96 720 72C960 48 1200 16 1440 48"
+            stroke={accentStroke}
+            strokeWidth="2.5"
+            strokeDasharray="6 6"
+            strokeOpacity="0.4"
+          />
+        )}
+      </svg>
+    </div>
+  );
+};
+
+/**
  * Honest Asset Placeholder Badge (Guaranteeing no fabricated images/testimonials)
  */
 export const StagingAssetBadge: React.FC<{ label?: string; note?: string; className?: string }> = ({

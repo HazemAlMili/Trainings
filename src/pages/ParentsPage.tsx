@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { AnimatedConversationalArc, HeroFloatingElements, AudioWaveSimulator } from '../components/motion/SignatureElements';
 import { FadeIn, StaggerContainer, StaggerItem, InteractiveHoverCard, PulseBeacon } from '../components/motion/MotionWrapper';
-import { StagingAssetBadge } from '../components/common/BrandMotif';
+import { StagingAssetBadge, SectionWaveDivider } from '../components/common/BrandMotif';
 import { FamilyWalletDemo } from '../components/common/FamilyWalletDemo';
 import { TeacherReportModal } from '../components/common/TeacherReportModal';
 import { VideoModal } from '../components/common/VideoModal';
@@ -62,7 +62,7 @@ export const ParentsPage: React.FC<ParentsPageProps> = ({ onOpenTrialModal }) =>
   return (
     <div className="relative overflow-hidden text-right">
       {/* SECTION 1: Flagship Hero (With Signature Staggered Animation & Floating Badges) */}
-      <section className="relative pt-12 pb-16 md:pt-20 md:pb-24 bg-[#F7F9F6] border-b border-slate-200/80">
+      <section className="relative pt-12 pb-16 md:pt-20 md:pb-24 bg-[#F7F9F6]">
         <AnimatedConversationalArc opacity={0.14} />
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
@@ -182,8 +182,10 @@ export const ParentsPage: React.FC<ParentsPageProps> = ({ onOpenTrialModal }) =>
         </div>
       </section>
 
+      <SectionWaveDivider fillColor="#FFFFFF" accentStroke="#118F86" heightClass="h-8 sm:h-12" />
+
       {/* SECTION 2: Near-Hero Trust Strip (Animated Stagger) */}
-      <section className="bg-white py-8 border-b border-slate-200/80">
+      <section className="bg-white py-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <StaggerContainer className="grid grid-cols-2 md:grid-cols-4 gap-6 text-right">
             <StaggerItem>
@@ -236,6 +238,8 @@ export const ParentsPage: React.FC<ParentsPageProps> = ({ onOpenTrialModal }) =>
           </StaggerContainer>
         </div>
       </section>
+
+      <SectionWaveDivider fillColor="#F7F9F6" accentStroke="#FFC77A" heightClass="h-8 sm:h-12" />
 
       {/* SECTION 3: Parent Pain Points (عارفين شو بقلق الأهل) */}
       <section className="py-16 md:py-24 bg-[#F7F9F6]">
@@ -312,8 +316,10 @@ export const ParentsPage: React.FC<ParentsPageProps> = ({ onOpenTrialModal }) =>
         </div>
       </section>
 
+      <SectionWaveDivider fillColor="#FFFFFF" accentStroke="#118F86" heightClass="h-8 sm:h-12" />
+
       {/* SECTION 4: The Mechanism (هيك منساعد الطفل يتقدّم) */}
-      <section className="py-16 md:py-24 bg-white border-y border-slate-200/80">
+      <section className="py-16 md:py-24 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <FadeIn className="text-center max-w-2xl mx-auto mb-12">
             <h2 className="text-2xl sm:text-3xl font-extrabold text-[#16344B]">
@@ -356,6 +362,8 @@ export const ParentsPage: React.FC<ParentsPageProps> = ({ onOpenTrialModal }) =>
           </FadeIn>
         </div>
       </section>
+
+      <SectionWaveDivider fillColor="#F7F9F6" accentStroke="#FFC77A" heightClass="h-8 sm:h-12" />
 
       {/* SECTION 5: Teachers Showcase */}
       <section id="lesson-preview" className="py-16 md:py-24 bg-[#F7F9F6]">
@@ -441,8 +449,10 @@ export const ParentsPage: React.FC<ParentsPageProps> = ({ onOpenTrialModal }) =>
         </div>
       </section>
 
+      <SectionWaveDivider fillColor="#FFFFFF" accentStroke="#118F86" heightClass="h-8 sm:h-12" />
+
       {/* SECTION 6: Teacher Report Sample Snapshot */}
-      <section className="py-16 md:py-24 bg-white border-b border-slate-200/80">
+      <section className="py-16 md:py-24 bg-white">
         <div className="max-w-5xl mx-auto px-4 sm:px-6">
           <FadeIn>
             <div className="bg-gradient-to-br from-[#F7F9F6] to-[#EAF1F2] rounded-3xl p-6 sm:p-10 border border-slate-200 text-right">
@@ -500,6 +510,8 @@ export const ParentsPage: React.FC<ParentsPageProps> = ({ onOpenTrialModal }) =>
         </div>
       </section>
 
+      <SectionWaveDivider fillColor="#F7F9F6" accentStroke="#FFC77A" heightClass="h-8 sm:h-12" />
+
       {/* SECTION 7: Family Wallet Simulator */}
       <section id="family-wallet" className="py-16 md:py-24 bg-[#F7F9F6]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
@@ -516,8 +528,10 @@ export const ParentsPage: React.FC<ParentsPageProps> = ({ onOpenTrialModal }) =>
         </div>
       </section>
 
+      <SectionWaveDivider fillColor="#FFFFFF" accentStroke="#118F86" heightClass="h-8 sm:h-12" />
+
       {/* SECTION 8: Pricing Guidance */}
-      <section className="py-16 md:py-24 bg-white border-y border-slate-200/80">
+      <section className="py-16 md:py-24 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <FadeIn className="text-center max-w-2xl mx-auto mb-12">
             <span className="text-xs font-bold text-[#118F86] block mb-1">
@@ -619,6 +633,8 @@ export const ParentsPage: React.FC<ParentsPageProps> = ({ onOpenTrialModal }) =>
         </div>
       </section>
 
+      <SectionWaveDivider fillColor="#F7F9F6" accentStroke="#FFC77A" heightClass="h-8 sm:h-12" />
+
       {/* SECTION 9: FAQs with Smooth Animated Transitions */}
       <section className="py-16 md:py-24 bg-[#F7F9F6]">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 text-right">
@@ -679,6 +695,8 @@ export const ParentsPage: React.FC<ParentsPageProps> = ({ onOpenTrialModal }) =>
           </div>
         </div>
       </section>
+
+      <SectionWaveDivider fillColor="#16344B" accentStroke="#FFC77A" heightClass="h-12 sm:h-16 md:h-24" />
 
       {/* SECTION 10: Final Flagship CTA */}
       <section className="py-16 md:py-24 bg-[#16344B] text-white relative">
