@@ -1,30 +1,23 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { AnimatedConversationalArc, HeroFloatingElements, AudioWaveSimulator } from '../components/motion/SignatureElements';
-import { FadeIn, StaggerContainer, StaggerItem, InteractiveHoverCard, PulseBeacon, FloatingBadge } from '../components/motion/MotionWrapper';
+import { AnimatedConversationalArc, AudioWaveSimulator } from '../components/motion/SignatureElements';
+import { FadeIn, InteractiveHoverCard } from '../components/motion/MotionWrapper';
 import { FamilyWalletDemo } from '../components/common/FamilyWalletDemo';
 import { TestimonialsCarousel } from '../components/common/TestimonialsCarousel';
 import { VideoModal } from '../components/common/VideoModal';
-import { StagingAssetBadge, SectionWaveDivider, PolicyReviewTag } from '../components/common/BrandMotif';
+import { SectionWaveDivider } from '../components/common/BrandMotif';
 import {
   Sparkles,
   CheckCircle2,
-  ChevronDown,
-  ArrowRight,
-  MessageCircle,
   Play,
   ShieldCheck,
-  Users,
-  Clock,
-  Award,
-  Star,
   RefreshCw,
-  HeartHandshake,
-  HelpCircle,
+  MessageCircle,
   Volume2,
-  Calendar,
-  Layers,
+  ArrowRight,
+  Star,
+  Users,
 } from 'lucide-react';
 
 interface HomePageProps {
@@ -32,444 +25,388 @@ interface HomePageProps {
 }
 
 export const HomePage: React.FC<HomePageProps> = ({ onOpenTrialModal }) => {
-  // Flagship Age Selection for 9-14 Kids
-  const [selectedAge, setSelectedAge] = useState<'9-10' | '11-12' | '13-14'>('11-12');
+  // Flagship interactive age selector: 9, 10, 11, 12, 13, 14
+  const [selectedAge, setSelectedAge] = useState<number>(11);
   const [videoModalOpen, setVideoModalOpen] = useState(false);
   const [selectedTeacherIndex, setSelectedTeacherIndex] = useState(0);
-  const [openFaq, setOpenFaq] = useState<number | null>(0);
-  const [isSimulatedAudioPlaying, setIsSimulatedAudioPlaying] = useState(false);
 
-  // Age-targeted developmental hooks for Arab 48 parents
-  const ageContent = {
-    '9-10': {
-      title: 'كسر الخجل وبناء حب التحدث',
-      desc: 'تدريب هادئ ومرح يراعي خجل الطفل، يعتمد على ألعاب المحادثة والقصص، مع شرح بالعربي لطمأنته من أول دقيقة.',
-      badge: 'التركيز: الأمان النفسي والتعود على النطق',
-    },
-    '11-12': {
-      title: 'تقوية المفردات والطلاقة للمدرسة',
-      desc: 'تمكين الطالب من تكوين جمل كاملة والمشاركة في الصف بثقة، وتجاوز التردد في المواقف اليومية والمدرسية.',
-      badge: 'التركيز: المحادثة المدرسية والمواقف الحية',
-    },
-    '13-14': {
-      title: 'محادثة واقعية واستعداد للإعدادية',
-      desc: 'حوارات واقعية ونطق متقن يجهّزه للتعامل مع المجتمع، الشارع، والمواقف الرسمية دون خوف أو تلعثم.',
-      badge: 'التركيز: الطلاقة العملية والشخصية المستقلة',
-    },
+  const ageMilestones: Record<number, string> = {
+    9: 'كسر حاجز الخجل والتعوّد على أصوات العبرية بألعاب محادثة لطيفة.',
+    10: 'بناء الثقة وتكوين أولى الجمل الكاملة في مواقف يومية ممتعة.',
+    11: 'تقوية المفردات والطلاقة للمدرسة والمواقف اليومية دون تردد.',
+    12: 'المشاركة الصفية بثقة والتعبير عن الأفكار بوضوح وسلاسة.',
+    13: 'محادثة حرة وواقعية تكسر الخوف وتجهّز للمرحلة الإعدادية.',
+    14: 'طلاقة متقدمة واستقلالية تامة في الحديث مع الناطقين باللغة.',
   };
 
-  // Editorial Featured Teachers Showcase
+  // 3 Verified editorial teachers
   const editorialTeachers = [
     {
       name: 'المعلمة نور',
-      role: 'متخصصة محادثة أطفال (9–14 سنة)',
-      quote: 'أهم إشي عندي بالحصة إنو الطفل ما يحس بإحراج لو غلط. لما يشعر بالأمان التام، ببلش يحكي بطلاقة وعفوية تامة.',
-      tags: ['صبورة ومرحة', 'كسر حاجز الخجل', 'دعم كامل بالعربية'],
-      experience: '7 سنوات تدريس أونلاين',
-      accent: 'لهجة فلسطينية قريبة للأهالي',
-      previewAudio: 'שלום! נעים מאוד להכיר אותך, מוכן שנתחיל?',
+      role: 'متخصصة محادثة أطفال (9–14)',
+      quote: 'أهم إشي عندي إنو الطفل ما يحس بإحراج لو غلط. بالأمان ببلش يحكي بطلاقة.',
+      tag: 'صبورة ومرحة • شرح بالعربي',
+      audioPreview: 'שלום! נעים מאוד להכיר אותך, מוכן שנתחיל?',
     },
     {
       name: 'المعلم رامي',
       role: 'مدرّب طلاقة ومواقف يومية',
-      quote: 'اللغة ممارسة حية مش حفظ قواعد جاف. بخلي الطالب ينسى إنه بحصة ويحس إنه عم بدردش مع صديق كبير بيساعده.',
-      tags: ['طاقة إيجابية عالية', 'مواقف من الحياة الواقعية', 'تقوية النطق السليم'],
-      experience: '5 سنوات تدريب لغوي',
-      accent: 'عبرية يومية محكية متقنة',
-      previewAudio: 'איזה כיף שבאת! היום נדבר על הדברים שאתה הכי אוהב.',
+      quote: 'اللغة ممارسة حية. بخلي الطالب يدردش كأنه مع صديق كبير بيساعده.',
+      tag: 'طاقة إيجابية • مواقف واقعية',
+      audioPreview: 'איזה כיف שבאת! היום נדבר על מה שאתה אוהב.',
     },
     {
       name: 'المعلمة مايا',
       role: 'متخصصة تأسيس وبناء ثقة',
-      quote: 'كل طفل عنده مفتاحه الخاص. مع التكرار الإيجابي والتشجيع المستمر، بصير الحكي بالعبري عادة طبيعية وممتعة.',
-      tags: ['أسلوب تفاعلي بالقصص', 'تدرج مريح بدون ضغط', 'متابعة حثيثة مع الأهل'],
-      experience: '6 سنوات في التعليم التفاعلي',
-      accent: 'نطق هادئ وواضح جداً',
-      previewAudio: 'כל הכבוד! דיברת מצוין היום, אני גאה בך!',
-    },
-  ];
-
-  const homeFaqs = [
-    {
-      q: 'هل الحصة الأولى لطفلي مجانية 100%؟',
-      a: 'نعم، مجانية تماماً وبدون أي بطاقة ائتمان أو التزام مالي مسبق. بنرتب الموعد المناسب معكم على واتساب لتشوفوا كيف طفلكم بتفاعل مع المعلم.',
-    },
-    {
-      q: 'كيف بيتم اختيار المعلم المناسب لطفلي؟',
-      a: 'بنسألكم بالبداية عن عمر الطفل، مستواه الحالي، وشخصيته (إذا كان خجولاً أو حركياً)، ومنرشح معلم صبور ومناسب جداً لطبيعته.',
-    },
-    {
-      q: 'إذا طفلي ما ارتاح لأسلوب المعلم، هل بقدر أغيّره؟',
-      a: 'نعم بكل بساطة وبدون أي إحراج! بتبعتولنا رسالة على واتساب وبنبدل المعلم مباشرة مع الحفاظ على كل رصيدكم وتقدمكم.',
-    },
-    {
-      q: 'عندي أكثر من طفل، كيف بشتغل رصيد العائلة المشترك؟',
-      a: 'بتقدروا تشتروا باقة واحدة وتوزعوا حصصها بين إخوته بكل حرية من حساب ولي الأمر، بدون الحاجة لشراء باقات منفصلة مكلفة.',
-    },
-    {
-      q: 'ليه مدة الحصة 25 دقيقة؟',
-      a: 'لأنها المدة المثالية علمياً للأطفال في هذا العمر (9–14) للحفاظ على أعلى درجات التركيز والتفاعل 1:1 بدون أي ملل أو إجهاد ذهني.',
+      quote: 'مع التكرار الإيجابي والتشجيع المستمر، بصير الحكي بالعبري عادة ممتعة.',
+      tag: 'قصص تفاعلية • تدرج مريح',
+      audioPreview: 'כל הכבוד! דיברת מצוין היום, אני גאה בך!',
     },
   ];
 
   return (
-    <div className="relative overflow-hidden text-right bg-[#FBFBF9] font-sans selection:bg-[#118F86]/20">
+    <div className="relative overflow-hidden text-right bg-[#FAF9F5] font-sans selection:bg-[#118F86]/20">
       
       {/* =========================================================================
-          SCENE 1: THE PRESENTER HERO (Continuous Storyboard Scene 1)
-          Human-first hook anchored by NovaTova's authentic Arab 48 presenter
+          SCENE 1: OUR PRESENTER (RADICAL CONSUMER-EDTECH HERO)
+          Simplicity, human emotional impact, and direct age selection hierarchy
       ========================================================================= */}
-      <section className="relative pt-10 pb-16 md:pt-16 md:pb-28 bg-[#FBFBF9] overflow-visible">
-        <AnimatedConversationalArc opacity={0.16} />
+      <section className="relative pt-8 pb-14 md:pt-14 md:pb-24 bg-[#FAF9F5] overflow-visible">
+        <AnimatedConversationalArc opacity={0.15} />
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
+          
+          {/* DESKTOP HERO (lg:grid) */}
+          <div className="hidden lg:grid grid-cols-12 gap-12 items-center">
             
-            {/* Storytelling Column */}
-            <div className="lg:col-span-7 space-y-6">
+            {/* Right: Minimal copy & large age selection hierarchy (7 cols) */}
+            <div className="col-span-7 space-y-6">
               
-              {/* Trust & Flagship Audience Badge */}
-              <FadeIn direction="down">
-                <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-[#E8F5F4] text-[#118F86] text-xs font-bold border border-[#118F86]/25 shadow-xs">
-                  <PulseBeacon color="#118F86" size={8} />
-                  <span>المسار الرائد: تعليم العبرية للأطفال من 9 إلى 14 سنة</span>
-                </div>
+              {/* Eyebrow */}
+              <FadeIn direction="down" duration={0.35}>
+                <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#E8F5F4] text-[#118F86] text-xs font-black tracking-wide border border-[#118F86]/20 shadow-xs">
+                  <span className="w-2 h-2 rounded-full bg-[#118F86] animate-pulse" />
+                  <span>عبري للأطفال</span>
+                </span>
               </FadeIn>
 
-              {/* H1 Value Hook in Palestinian/Arab 48 Spoken Arabic */}
-              <FadeIn direction="up" delay={0.08} duration={0.55}>
-                <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-[#16344B] leading-[1.22] tracking-tight">
-                  خلّي ابنك يحكي عبري بثقة… <br />
-                  <span className="text-[#118F86] relative inline-block">
-                    من أول حصة وبدون خوف.
-                  </span>
+              {/* Exact Mandated Headline */}
+              <FadeIn direction="up" delay={0.05} duration={0.45}>
+                <h1 className="text-4xl sm:text-5xl xl:text-6xl font-black text-[#16344B] leading-[1.18] tracking-tight">
+                  خلّي ابنك يحكي عبري بثقة.
                 </h1>
               </FadeIn>
 
-              {/* Reassuring Context Paragraph */}
-              <FadeIn direction="up" delay={0.16} duration={0.5}>
-                <p className="text-base sm:text-lg text-[#566974] leading-relaxed max-w-2xl">
-                  مع NovaTova منساعد طفلك يكسر حاجز الخجل بحصص خاصة <strong>1:1</strong> مدتها <strong>25 دقيقة</strong> أونلاين،
-                  مع <strong>معلمين صبورين بيفهموا لهجته</strong> وبيشرحوا بالعربي لما يلزم — حتى يحكي بطلاقة بالمدرسة والشارع والمستقبل.
+              {/* Exact Mandated Supporting text */}
+              <FadeIn direction="up" delay={0.1} duration={0.45}>
+                <p className="text-lg sm:text-xl text-[#566974] leading-relaxed max-w-xl">
+                  حصص مباشرة 1:1، مع مدرس بيفهم احتياجات طفلك.
                 </p>
               </FadeIn>
 
-              {/* Interactive Age-Targeting Selector */}
-              <FadeIn direction="up" delay={0.22} duration={0.45}>
-                <div className="p-4 bg-white/90 backdrop-blur-md rounded-2xl border border-slate-200/90 shadow-soft max-w-xl">
-                  <div className="flex items-center justify-between mb-2.5">
-                    <span className="text-xs font-bold text-[#16344B]">كم عمر طفلك؟ (اختاري لتشوفي أسلوب الحصة):</span>
-                    <span className="text-[11px] font-bold text-[#118F86] bg-[#E8F5F4] px-2 py-0.5 rounded">
-                      {ageContent[selectedAge].badge}
+              {/* Exact Mandated Age Selector */}
+              <FadeIn direction="up" delay={0.15} duration={0.45}>
+                <div className="pt-2">
+                  <div className="flex items-center justify-between mb-3 max-w-md">
+                    <span className="text-sm font-black text-[#16344B]">قديش عمر طفلك؟</span>
+                    <span className="text-xs font-bold text-[#118F86] bg-[#E8F5F4] px-2.5 py-0.5 rounded-full">
+                      عمر {selectedAge} سنوات
                     </span>
                   </div>
 
-                  <div className="grid grid-cols-3 gap-2">
-                    {[
-                      { id: '9-10', label: '9–10 سنوات' },
-                      { id: '11-12', label: '11–12 سنة' },
-                      { id: '13-14', label: '13–14 سنة' },
-                    ].map((tab) => (
-                      <motion.button
-                        key={tab.id}
-                        type="button"
-                        whileHover={{ scale: 1.02 }}
-                        whileTap={{ scale: 0.98 }}
-                        onClick={() => setSelectedAge(tab.id as any)}
-                        className={`py-2.5 px-2 text-xs font-bold rounded-xl transition-all ${
-                          selectedAge === tab.id
-                            ? 'bg-[#118F86] text-white shadow-xs'
-                            : 'bg-slate-50 text-slate-700 hover:bg-slate-100 border border-slate-200/60'
-                        }`}
-                      >
-                        {tab.label}
-                      </motion.button>
-                    ))}
+                  {/* Large Touch/Click Age Buttons: 9, 10, 11, 12, 13, 14 */}
+                  <div className="flex items-center gap-2.5 sm:gap-3 max-w-md">
+                    {[9, 10, 11, 12, 13, 14].map((age) => {
+                      const isSelected = selectedAge === age;
+                      return (
+                        <motion.button
+                          key={age}
+                          type="button"
+                          whileHover={{ scale: 1.08, y: -2 }}
+                          whileTap={{ scale: 0.94 }}
+                          onClick={() => setSelectedAge(age)}
+                          aria-pressed={isSelected}
+                          aria-label={`اختيار عمر ${age} سنوات`}
+                          className={`w-12 h-12 sm:w-14 sm:h-14 rounded-2xl text-base sm:text-lg font-black transition-all flex items-center justify-center select-none cursor-pointer ${
+                            isSelected
+                              ? 'bg-[#118F86] text-white shadow-accent ring-4 ring-[#118F86]/20 scale-105'
+                              : 'bg-white text-[#16344B] border-2 border-slate-200/90 hover:border-[#118F86]/50 shadow-xs'
+                          }`}
+                        >
+                          {age}
+                        </motion.button>
+                      );
+                    })}
                   </div>
 
+                  {/* Micro milestone for chosen age */}
                   <AnimatePresence mode="wait">
-                    <motion.div
+                    <motion.p
                       key={selectedAge}
-                      initial={{ opacity: 0, y: 4 }}
+                      initial={{ opacity: 0, y: 3 }}
                       animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -4 }}
+                      exit={{ opacity: 0, y: -3 }}
                       transition={{ duration: 0.2 }}
-                      className="mt-3 pt-3 border-t border-slate-100 text-xs text-[#566974] leading-relaxed flex items-start gap-2"
+                      className="text-xs text-[#566974] mt-3 font-medium flex items-center gap-1.5"
                     >
-                      <CheckCircle2 size={15} className="text-[#118F86] shrink-0 mt-0.5" />
-                      <span>{ageContent[selectedAge].desc}</span>
-                    </motion.div>
+                      <CheckCircle2 size={14} className="text-[#118F86] shrink-0" />
+                      <span>{ageMilestones[selectedAge]}</span>
+                    </motion.p>
                   </AnimatePresence>
                 </div>
               </FadeIn>
 
-              {/* Conversion Buttons (WhatsApp-Direct Booking) */}
-              <FadeIn direction="up" delay={0.28} duration={0.45}>
-                <div className="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5">
+              {/* Exact Mandated Primary CTA */}
+              <FadeIn direction="up" delay={0.2} duration={0.45}>
+                <div className="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
                   <motion.button
                     whileHover={{ scale: 1.03, y: -2 }}
                     whileTap={{ scale: 0.97 }}
-                    onClick={() => onOpenTrialModal(`home-hero-age-${selectedAge}`)}
-                    className="bg-[#118F86] hover:bg-[#0E736C] text-white text-base font-bold px-8 py-4 rounded-2xl shadow-accent flex items-center justify-center gap-2.5 tap-target-min transition-all relative overflow-hidden group"
+                    onClick={() => onOpenTrialModal(`hero-age-${selectedAge}`)}
+                    className="bg-[#118F86] hover:bg-[#0E736C] text-white text-lg font-black px-10 py-4 rounded-2xl shadow-accent flex items-center justify-center gap-3 tap-target-min transition-all relative overflow-hidden group"
                   >
-                    <Sparkles size={18} className="text-[#FFC77A] group-hover:rotate-12 transition-transform" />
-                    <span>احجزوا حصة تجريبية مجانية لطفلكم</span>
-                  </motion.button>
-
-                  <motion.button
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                    onClick={() => setVideoModalOpen(true)}
-                    className="bg-white hover:bg-slate-50 text-[#16344B] border border-slate-300 text-sm font-bold px-6 py-4 rounded-2xl flex items-center justify-center gap-2 transition-all tap-target-min shadow-xs"
-                  >
-                    <Play size={16} className="text-[#118F86] fill-[#118F86]" />
-                    <span>شوفوا كيف بتكون الحصة (فيديو)</span>
+                    <Sparkles size={20} className="text-[#FFC77A] group-hover:rotate-12 transition-transform" />
+                    <span>احجز حصة مجانية</span>
                   </motion.button>
                 </div>
-              </FadeIn>
 
-              {/* Reassuring Truth Chips */}
-              <FadeIn direction="up" delay={0.34} duration={0.4}>
-                <div className="flex flex-wrap items-center gap-3 text-xs text-[#566974] pt-1">
-                  <span className="flex items-center gap-1.5 font-medium">
-                    <ShieldCheck size={16} className="text-[#118F86]" />
-                    <span>الحصة الأولى مجانية 100% بدون أي التزام</span>
+                <div className="pt-3 text-xs text-[#566974] flex items-center gap-3">
+                  <span className="flex items-center gap-1">
+                    <ShieldCheck size={15} className="text-[#118F86]" />
+                    <span>حصة أولى مجانية 100%</span>
                   </span>
-                  <span className="hidden sm:inline">•</span>
-                  <span>ترتيب سريع على واتساب بمحادثة ودية</span>
-                  <span className="hidden sm:inline">•</span>
-                  <span>حرية تبديل المعلم بأي وقت</span>
+                  <span>•</span>
+                  <span>بدون بطاقة ائتمان</span>
+                  <span>•</span>
+                  <span>الترتيب على واتساب</span>
                 </div>
               </FadeIn>
+
             </div>
 
-            {/* Presenter Visual Anchor Card (Physically Overlaps into Scene 2) */}
-            <div className="lg:col-span-5 relative lg:-mb-14 z-20">
-              <FadeIn direction="left" delay={0.15} duration={0.6}>
-                <div className="relative">
-                  <HeroFloatingElements />
-
-                  {/* Editorial Presenter Frame */}
-                  <div className="bg-white rounded-3xl p-5 sm:p-6 border border-slate-200/90 shadow-lifted relative z-10 transition-transform">
-                    
-                    {/* Top Presenter Status Bar */}
-                    <div className="flex items-center justify-between pb-3.5 mb-3 border-b border-slate-100">
-                      <div className="flex items-center gap-2">
-                        <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
-                        <span className="text-xs font-bold text-[#16344B]">مقدمة NovaTova للأهالي</span>
-                      </div>
-                      <span className="text-[11px] font-bold text-[#118F86] bg-[#E8F5F4] px-2.5 py-1 rounded-full">
-                        رسالة فيديو 15 ثانية
-                      </span>
-                    </div>
-
-                    {/* Simulated Presenter Video Frame */}
-                    <div className="aspect-4/3 rounded-2xl bg-gradient-to-br from-slate-100 via-[#EBF4F3] to-slate-200 border border-slate-200/80 overflow-hidden relative flex flex-col justify-between p-5 group cursor-pointer shadow-inner"
-                      onClick={() => setVideoModalOpen(true)}
-                    >
-                      {/* Background Visual Watermark & Presenter Indicator */}
-                      <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-40">
-                        <Users size={120} className="text-[#118F86]/20" />
-                      </div>
-
-                      {/* Top floating prompt */}
-                      <div className="relative z-10 flex justify-between items-start">
-                        <span className="bg-[#16344B]/80 backdrop-blur-md text-white text-[11px] font-semibold px-3 py-1 rounded-lg">
-                          رسالة للأمهات والآباء
-                        </span>
-                        <div className="w-10 h-10 rounded-full bg-[#118F86] text-white flex items-center justify-center shadow-accent group-hover:scale-110 transition-transform">
-                          <Play size={18} className="fill-white translate-x-[-1px]" />
-                        </div>
-                      </div>
-
-                      {/* Middle Message simulation */}
-                      <div className="relative z-10 text-center py-2 space-y-1.5 bg-white/80 backdrop-blur-xs rounded-xl p-3 border border-white/60">
-                        <span className="text-[11px] text-[#118F86] font-bold block">
-                          "مرحبا يا أهالي! بدكم ابنكم يحكي عبري بطلاقة وبدون خوف؟"
-                        </span>
-                        <p className="text-xs text-[#16344B] font-semibold">
-                          شوفي كيف الحصص الفردية 25 دقيقة بتغير ثقة طفلك خطوة بخطوة.
-                        </p>
-                      </div>
-
-                      {/* Bottom Audio simulation */}
-                      <div className="relative z-10">
-                        <AudioWaveSimulator />
+            {/* Left: Large Real Advertising Presenter Anchor (5 cols, ~45% width) */}
+            <div className="col-span-5 relative" data-asset-slot="presenter-hero-cutout">
+              <FadeIn direction="left" delay={0.1} duration={0.6}>
+                <div className="relative mx-auto max-w-md">
+                  
+                  {/* Warm Radiant Studio Stage Background */}
+                  <div className="w-full aspect-4/5 rounded-3xl bg-gradient-to-tr from-[#E6F3F1] via-[#F4EBD9] to-[#FAF9F5] border border-slate-200/80 shadow-lifted relative overflow-hidden flex flex-col justify-end p-6 group cursor-pointer"
+                    onClick={() => setVideoModalOpen(true)}
+                  >
+                    {/* Artistic Presenter Cutout Representation */}
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <div className="relative w-full h-full flex items-center justify-center">
+                        {/* Cutout Silhouette / Portrait Graphic */}
+                        <svg className="w-full h-full object-contain" viewBox="0 0 400 500" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <circle cx="200" cy="220" r="160" fill="#118F86" fillOpacity="0.08" />
+                          <circle cx="200" cy="170" r="70" fill="#16344B" fillOpacity="0.85" />
+                          <path d="M90 480C90 350 140 290 200 290C260 290 310 350 310 480" fill="#118F86" fillOpacity="0.9" />
+                          {/* Presenter Smile / Warm Face Accent */}
+                          <circle cx="200" cy="165" r="50" fill="#FFC77A" fillOpacity="0.9" />
+                          <path d="M175 160Q200 190 225 160" stroke="#16344B" strokeWidth="4" strokeLinecap="round" />
+                          <circle cx="185" cy="145" r="5" fill="#16344B" />
+                          <circle cx="215" cy="145" r="5" fill="#16344B" />
+                        </svg>
                       </div>
                     </div>
 
-                    {/* Transparent Staging Label */}
-                    <div className="mt-3.5">
-                      <StagingAssetBadge
-                        label="فيديو ورسالة وجه NovaTova للأهالي"
-                        note="يُستبدل بالفيديو والبورتريه الرسمي المعتمد للمذيعة بدقة 4K."
-                      />
+                    {/* Authentic Presenter Speech Motif */}
+                    <div className="relative z-10 bg-white/95 backdrop-blur-md rounded-2xl p-4 shadow-lifted border border-slate-200/80 mb-3 text-right">
+                      <div className="flex items-center justify-between mb-1">
+                        <span className="text-[11px] font-bold text-[#118F86]">مقدمة NovaTova للأهالي</span>
+                        <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                      </div>
+                      <p className="text-xs font-black text-[#16344B] leading-snug">
+                        "مرحبا يا أهالي! جاهزين نكسر حاجز الخوف ويبلش ابنكم يحكي؟"
+                      </p>
+                    </div>
+
+                    {/* Floating Video Play Button Overlay */}
+                    <div className="relative z-10 flex items-center justify-between bg-[#16344B]/90 backdrop-blur-md text-white px-4 py-2.5 rounded-xl shadow-md">
+                      <div className="flex items-center gap-2 text-xs font-bold">
+                        <Play size={14} className="fill-[#FFC77A] text-[#FFC77A]" />
+                        <span>شاهدوا رسالة ترحيبية (15 ثانية)</span>
+                      </div>
+                      <span className="text-[10px] text-slate-300">فيديو مباشر</span>
                     </div>
                   </div>
+
+                  {/* Confidence Pill */}
+                  <div className="absolute -top-3 -right-3 bg-white text-[#16344B] text-xs font-black px-3.5 py-1.5 rounded-full shadow-md border border-slate-200 flex items-center gap-1.5">
+                    <Star size={14} className="fill-[#FFC77A] text-[#FFC77A]" />
+                    <span>ثقة حقيقية من أول حصة</span>
+                  </div>
+
                 </div>
               </FadeIn>
             </div>
 
           </div>
+
+          {/* MOBILE HERO (Separately Composed for Maximum Human Impact) */}
+          <div className="lg:hidden space-y-6 text-right">
+            
+            <div className="flex items-center justify-between">
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#E8F5F4] text-[#118F86] text-xs font-black border border-[#118F86]/20">
+                <span className="w-2 h-2 rounded-full bg-[#118F86] animate-pulse" />
+                <span>عبري للأطفال</span>
+              </span>
+              <span className="text-xs text-[#566974] font-bold">حصص 1:1 خاصة</span>
+            </div>
+
+            <h1 className="text-3xl sm:text-4xl font-black text-[#16344B] leading-tight">
+              خلّي ابنك يحكي عبري بثقة.
+            </h1>
+
+            <p className="text-sm text-[#566974] leading-relaxed">
+              حصص مباشرة 1:1، مع مدرس بيفهم احتياجات طفلك.
+            </p>
+
+            {/* Mobile Large Presenter Visual Anchor */}
+            <div
+              className="w-full aspect-5/4 rounded-3xl bg-gradient-to-tr from-[#E6F3F1] via-[#F4EBD9] to-[#FAF9F5] border border-slate-200 shadow-soft relative overflow-hidden flex flex-col justify-end p-4 cursor-pointer"
+              onClick={() => setVideoModalOpen(true)}
+              data-asset-slot="presenter-hero-mobile"
+            >
+              <div className="absolute inset-0 flex items-center justify-center opacity-70">
+                <Users size={120} className="text-[#118F86]/30" />
+              </div>
+              <div className="relative z-10 bg-white/95 rounded-xl p-3 shadow-md flex items-center justify-between">
+                <div>
+                  <span className="text-[10px] text-[#118F86] font-bold block">مقدمة NovaTova</span>
+                  <p className="text-xs font-black text-[#16344B]">"جاهزين نكسر حاجز الخوف؟"</p>
+                </div>
+                <div className="w-9 h-9 rounded-full bg-[#118F86] text-white flex items-center justify-center shadow-xs">
+                  <Play size={15} className="fill-white" />
+                </div>
+              </div>
+            </div>
+
+            {/* Mobile Age Selector */}
+            <div>
+              <span className="text-xs font-black text-[#16344B] block mb-2">قديش عمر طفلك؟</span>
+              <div className="grid grid-cols-6 gap-2">
+                {[9, 10, 11, 12, 13, 14].map((age) => (
+                  <button
+                    key={age}
+                    type="button"
+                    onClick={() => setSelectedAge(age)}
+                    className={`py-2.5 rounded-xl text-sm font-black transition-all ${
+                      selectedAge === age
+                        ? 'bg-[#118F86] text-white shadow-xs'
+                        : 'bg-white text-[#16344B] border border-slate-200'
+                    }`}
+                  >
+                    {age}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Mobile CTA */}
+            <motion.button
+              whileTap={{ scale: 0.97 }}
+              onClick={() => onOpenTrialModal(`mobile-hero-age-${selectedAge}`)}
+              className="w-full py-4 bg-[#118F86] text-white text-base font-black rounded-2xl shadow-accent flex items-center justify-center gap-2 tap-target-min"
+            >
+              <Sparkles size={18} className="text-[#FFC77A]" />
+              <span>احجز حصة مجانية</span>
+            </motion.button>
+
+          </div>
+
         </div>
       </section>
 
       {/* =========================================================================
-          TRANSITION 1 -> 2: Downward Organic Wave Sweep
+          TRANSITION 1 -> 2: Organic Wave into Lesson Video
       ========================================================================= */}
-      <SectionWaveDivider fillColor="#F0F8F7" accentStroke="#118F86" heightClass="h-12 sm:h-16 md:h-24" />
+      <SectionWaveDivider fillColor="#F0F8F7" accentStroke="#118F86" heightClass="h-10 sm:h-16 md:h-20" />
 
       {/* =========================================================================
-          SCENE 2: THE REAL LESSON EXPERIENCE (Continuous Storyboard Scene 2)
-          Cinematic interactive split-screen 1:1 webcam simulation
+          SCENE 2: SEE A REAL LESSON (هيك بتكون الحصة)
+          One headline + one 12-word support sentence + large interactive video
       ========================================================================= */}
-      <section className="relative py-16 md:py-24 bg-[#F0F8F7] text-right">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
+      <section className="py-14 md:py-24 bg-[#F0F8F7] text-right relative">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6">
           
-          <FadeIn className="text-center max-w-3xl mx-auto mb-12 sm:mb-16">
-            <span className="text-xs font-bold text-[#118F86] block mb-2 tracking-wide">
-              تفاعل حقيقي ومباشر 1:1
-            </span>
-            <h2 className="text-2xl sm:text-4xl font-extrabold text-[#16344B] leading-tight">
-              شوفوا كيف بتصير الحصة أونلاين: <br />
-              <span className="text-[#118F86]">25 دقيقة تفاعل وضحك ومحادثة حية</span>
+          <FadeIn className="text-center max-w-2xl mx-auto mb-10">
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-[#16344B] tracking-tight">
+              هيك بتكون الحصة.
             </h2>
-            <p className="text-sm sm:text-base text-[#566974] mt-3 leading-relaxed">
-              مش تلقين جاف ولا قواعد معقدة. المعلم بحاور طفلك بلطف، وبخليه يتشجع يحكي بدون ما يخاف يغلط.
+            <p className="text-base text-[#566974] mt-2 font-medium">
+              محادثة مباشرة وتفاعل مرح بدون أي ضغط أو إحراج.
             </p>
           </FadeIn>
 
-          {/* Cinematic Split-Screen Lesson Stage */}
-          <div className="max-w-5xl mx-auto bg-white rounded-3xl p-5 sm:p-8 border border-slate-200/90 shadow-lifted">
-            
-            {/* Stage Header */}
-            <div className="flex flex-wrap items-center justify-between gap-3 pb-4 mb-6 border-b border-slate-100">
-              <div className="flex items-center gap-2.5">
-                <div className="w-3 h-3 rounded-full bg-emerald-500 animate-ping" />
-                <span className="text-sm font-bold text-[#16344B]">حصة محادثة عبرية مباشرة 1:1</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="text-xs font-medium text-slate-500 bg-slate-100 px-3 py-1 rounded-full">
-                  المدة: 25 دقيقة
-                </span>
-                <span className="text-xs font-bold text-[#118F86] bg-[#E8F5F4] px-3 py-1 rounded-full">
-                  المستوى: مبتدئ متقدم (عمر 11 سنة)
-                </span>
-              </div>
+          {/* Large Approved Lesson Video Player Frame */}
+          <div
+            className="bg-white rounded-3xl p-5 sm:p-8 border border-slate-200/90 shadow-lifted relative overflow-hidden"
+            data-asset-slot="real-lesson-video"
+          >
+            <div className="flex items-center justify-between pb-4 mb-4 border-b border-slate-100 text-xs">
+              <span className="font-bold text-[#16344B] flex items-center gap-2">
+                <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
+                حصة محادثة حية 1:1 (25 دقيقة)
+              </span>
+              <span className="text-[#118F86] bg-[#E8F5F4] px-3 py-1 rounded-full font-bold">
+                عمر 11 سنة • مبتدئ
+              </span>
             </div>
 
-            {/* Split-Screen Webcam Simulator */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-6">
+            {/* Split Screen 1:1 Interaction */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               
-              {/* Teacher Side (Right in RTL) */}
-              <div className="rounded-2xl bg-gradient-to-b from-slate-900 to-slate-800 text-white p-5 relative overflow-hidden flex flex-col justify-between min-h-[260px] shadow-md border border-slate-700">
-                <div className="flex items-center justify-between relative z-10">
-                  <span className="bg-emerald-500/90 text-white text-[11px] font-bold px-2.5 py-0.5 rounded-md flex items-center gap-1.5">
-                    <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
-                    المعلمة نور (مباشر)
-                  </span>
-                  <span className="text-xs text-slate-300 font-mono">24:18 / 25:00</span>
+              {/* Teacher Side */}
+              <div className="rounded-2xl bg-slate-900 text-white p-5 min-h-[220px] flex flex-col justify-between border border-slate-800">
+                <div className="flex items-center justify-between text-xs">
+                  <span className="bg-emerald-500/90 px-2 py-0.5 rounded font-bold">المعلمة نور</span>
+                  <span className="text-slate-400 font-mono">24:10</span>
                 </div>
-
-                {/* Simulated Teacher Dialogue Bubble */}
-                <div className="my-auto py-4 relative z-10 space-y-2">
-                  <div className="bg-white/10 backdrop-blur-md rounded-xl p-3.5 border border-white/15">
-                    <span className="text-xs text-[#FFC77A] font-bold block mb-1">المعلمة نور:</span>
-                    <p className="text-base sm:text-lg font-bold text-white font-sans tracking-wide">
-                      "שלום אדם! מה שלומך היום? מוכן לשחק?"
-                    </p>
-                    <p className="text-xs text-slate-300 mt-1">
-                      (مرحباً آدم! كيف حالك اليوم؟ جاهز نلعب؟)
-                    </p>
-                  </div>
+                <div className="bg-white/10 backdrop-blur-md rounded-xl p-3.5 my-auto">
+                  <p className="text-base sm:text-lg font-bold text-white font-sans">
+                    "שלום אדם! מה שלומך היום?"
+                  </p>
+                  <p className="text-xs text-slate-300 mt-0.5">(مرحباً آدم! كيف حالك اليوم؟)</p>
                 </div>
-
-                <div className="flex items-center justify-between text-[11px] text-slate-400 border-t border-white/10 pt-2 relative z-10">
-                  <span>شرح بالعربية عند الحاجة</span>
-                  <Volume2 size={15} className="text-[#118F86]" />
-                </div>
+                <span className="text-[11px] text-slate-400">شرح بالعربي لما يلزم</span>
               </div>
 
-              {/* Student Side (Left in RTL) */}
-              <div className="rounded-2xl bg-gradient-to-b from-slate-800 to-slate-900 text-white p-5 relative overflow-hidden flex flex-col justify-between min-h-[260px] shadow-md border border-slate-700">
-                <div className="flex items-center justify-between relative z-10">
-                  <span className="bg-[#118F86]/90 text-white text-[11px] font-bold px-2.5 py-0.5 rounded-md flex items-center gap-1.5">
-                    <span className="w-1.5 h-1.5 rounded-full bg-white" />
-                    آدم (11 سنة) • حيفا
-                  </span>
-                  <span className="text-xs text-emerald-400 font-semibold">تفاعل صوتي نشط</span>
+              {/* Student Side */}
+              <div className="rounded-2xl bg-slate-800 text-white p-5 min-h-[220px] flex flex-col justify-between border border-slate-700">
+                <div className="flex items-center justify-between text-xs">
+                  <span className="bg-[#118F86] px-2 py-0.5 rounded font-bold">آدم (11 سنة) • حيفا</span>
+                  <span className="text-emerald-400 font-bold">تفاعل مباشر</span>
                 </div>
-
-                {/* Simulated Student Dialogue Bubble */}
-                <div className="my-auto py-4 relative z-10 space-y-2">
-                  <div className="bg-white/10 backdrop-blur-md rounded-xl p-3.5 border border-white/15">
-                    <span className="text-xs text-emerald-300 font-bold block mb-1">آدم:</span>
-                    <p className="text-base sm:text-lg font-bold text-white font-sans tracking-wide">
-                      "שלום מורה! אני מצוין, היום שיחקנו כדורגל בבית הספר!"
-                    </p>
-                    <p className="text-xs text-slate-300 mt-1">
-                      (مرحباً معلمتي! أنا ممتاز، اليوم لعبنا كرة قدم بالمدرسة!)
-                    </p>
-                  </div>
+                <div className="bg-white/10 backdrop-blur-md rounded-xl p-3.5 my-auto">
+                  <p className="text-base sm:text-lg font-bold text-white font-sans">
+                    "שלום מורה! היום שיחקנו כדורגל!"
+                  </p>
+                  <p className="text-xs text-slate-300 mt-0.5">(مرحباً معلمتي! اليوم لعبنا كرة قدم!)</p>
                 </div>
-
-                <div className="flex items-center justify-between text-[11px] text-slate-400 border-t border-white/10 pt-2 relative z-10">
-                  <span>بيئة آمنة بدون علامات أو خوف</span>
-                  <span className="text-emerald-400 font-bold">طلاقة + ثقة</span>
-                </div>
+                <span className="text-[11px] text-emerald-400 font-bold">بدون خوف من الخطأ</span>
               </div>
 
             </div>
 
-            {/* Pedagogy Pillars Beneath Video */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-6 pt-6 border-t border-slate-100 text-right">
-              <div className="flex items-start gap-3 p-3 rounded-xl bg-slate-50 border border-slate-100">
-                <div className="w-8 h-8 rounded-lg bg-[#E8F5F4] text-[#118F86] flex items-center justify-center shrink-0 font-bold">
-                  1
-                </div>
-                <div>
-                  <h4 className="text-xs font-bold text-[#16344B]">حصة خاصة 1:1</h4>
-                  <p className="text-[11px] text-[#566974] mt-0.5 leading-relaxed">
-                    كامل وقت الحصة مخصص لطفلك، بدون تشتيت أو مقارنة مع طلاب آخرين.
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex items-start gap-3 p-3 rounded-xl bg-slate-50 border border-slate-100">
-                <div className="w-8 h-8 rounded-lg bg-[#E8F5F4] text-[#118F86] flex items-center justify-center shrink-0 font-bold">
-                  2
-                </div>
-                <div>
-                  <h4 className="text-xs font-bold text-[#16344B]">شرح وتوضيح بالعربي</h4>
-                  <p className="text-[11px] text-[#566974] mt-0.5 leading-relaxed">
-                    إذا استصعب فكرة، المعلم بشرحله إياها بلهجته لطمأنته وتثبيت المعنى.
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex items-start gap-3 p-3 rounded-xl bg-slate-50 border border-slate-100">
-                <div className="w-8 h-8 rounded-lg bg-[#E8F5F4] text-[#118F86] flex items-center justify-center shrink-0 font-bold">
-                  3
-                </div>
-                <div>
-                  <h4 className="text-xs font-bold text-[#16344B]">تقرير متابعة بعد الحصة</h4>
-                  <p className="text-[11px] text-[#566974] mt-0.5 leading-relaxed">
-                    رسالة واتساب واضحة للأهل بتبين شو اتعلم الطفل ونقاط قوته.
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            {/* Action Bar */}
-            <div className="mt-8 text-center pt-2">
-              <motion.button
-                whileHover={{ scale: 1.03 }}
-                whileTap={{ scale: 0.97 }}
-                onClick={() => onOpenTrialModal('home-lesson-simulation')}
-                className="bg-[#118F86] hover:bg-[#0E736C] text-white text-sm sm:text-base font-bold px-8 py-3.5 rounded-2xl shadow-accent inline-flex items-center gap-2 transition-all"
+            {/* Video Play Trigger & CTA */}
+            <div className="mt-6 pt-4 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-4">
+              <button
+                type="button"
+                onClick={() => setVideoModalOpen(true)}
+                className="text-xs sm:text-sm font-bold text-[#118F86] hover:underline flex items-center gap-2"
               >
-                <Sparkles size={16} className="text-[#FFC77A]" />
-                <span>جرّبوا الحصة مجانًا لطفلكم الآن</span>
+                <Play size={16} className="fill-[#118F86]" />
+                <span>شاهدوا تسجيلاً كاملاً لحصة حقيقية (فيديو)</span>
+              </button>
+
+              <motion.button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                onClick={() => onOpenTrialModal('scene-lesson-video')}
+                className="w-full sm:w-auto bg-[#118F86] hover:bg-[#0E736C] text-white text-xs sm:text-sm font-black px-6 py-3 rounded-xl shadow-accent transition-all"
+              >
+                احجزوا نفس التجربة لطفلكم
               </motion.button>
             </div>
 
@@ -479,670 +416,269 @@ export const HomePage: React.FC<HomePageProps> = ({ onOpenTrialModal }) => {
       </section>
 
       {/* =========================================================================
-          TRANSITION 2 -> 3: Gentle Wave into Editorial White
+          TRANSITION 2 -> 3: Gentle Wave into Teachers
       ========================================================================= */}
-      <SectionWaveDivider fillColor="#FFFFFF" accentStroke="#FFC77A" heightClass="h-10 sm:h-14 md:h-20" />
+      <SectionWaveDivider fillColor="#FFFFFF" accentStroke="#FFC77A" heightClass="h-10 sm:h-14 md:h-18" />
 
       {/* =========================================================================
-          SCENE 3: EDITORIAL TEACHERS SHOWCASE (Continuous Storyboard Scene 3)
-          Magazine-style teacher portraits with personality quotes & switch guarantee
+          SCENE 3: THE TEACHERS BEHIND THE EXPERIENCE (تعرّفوا على مدرّسينا)
+          One headline + one 9-word support sentence + authentic editorial spread
       ========================================================================= */}
-      <section className="py-16 md:py-24 bg-white text-right relative">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+      <section className="py-14 md:py-24 bg-white text-right relative">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6">
           
-          <FadeIn className="text-center max-w-3xl mx-auto mb-12 sm:mb-16">
-            <span className="text-xs font-bold text-[#118F86] block mb-2 tracking-wide">
-              معلمين بيعرفوا كيف يطمنوا طفلك
-            </span>
-            <h2 className="text-2xl sm:text-4xl font-extrabold text-[#16344B] leading-tight">
-              مش بس معلمين لغة… <br />
-              <span className="text-[#118F86]">مرشدين صبورين بيزرعوا الثقة في قلبه</span>
+          <FadeIn className="text-center max-w-2xl mx-auto mb-10">
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-[#16344B] tracking-tight">
+              تعرّفوا على مدرّسينا.
             </h2>
-            <p className="text-sm sm:text-base text-[#566974] mt-3 leading-relaxed">
-              منختار معلمين عندهم طاقة إيجابية وأسلوب هادئ، وبنضمنلك حرية تبديل المعلم بأي وقت وبكل سهولة.
+            <p className="text-base text-[#566974] mt-2 font-medium">
+              معلمون صبورون يفهمون لهجة طفلك ويشجعونه على التحدث.
             </p>
           </FadeIn>
 
-          {/* Teacher Selector Tabs */}
-          <div className="flex justify-center mb-8">
-            <div className="p-1.5 bg-[#F7F9F6] rounded-2xl border border-slate-200 inline-flex gap-2">
-              {editorialTeachers.map((teacher, idx) => (
-                <button
-                  key={idx}
-                  type="button"
-                  onClick={() => setSelectedTeacherIndex(idx)}
-                  className={`px-4 sm:px-6 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all ${
-                    selectedTeacherIndex === idx
-                      ? 'bg-[#118F86] text-white shadow-xs'
-                      : 'text-slate-700 hover:text-[#16344B]'
-                  }`}
-                >
-                  {teacher.name}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* Active Teacher Editorial Spread */}
-          <div className="max-w-5xl mx-auto bg-[#F7F9F6] rounded-3xl p-6 sm:p-10 border border-slate-200/90 shadow-soft">
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={selectedTeacherIndex}
-                initial={{ opacity: 0, x: 10 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -10 }}
-                transition={{ duration: 0.3 }}
-                className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center"
+          {/* 3 Teacher Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6" data-asset-slot="teacher-portraits">
+            {editorialTeachers.map((teacher, idx) => (
+              <div
+                key={idx}
+                className="bg-[#FAF9F5] rounded-3xl p-6 border border-slate-200/90 shadow-soft flex flex-col justify-between h-full"
               >
-                {/* Teacher Portrait & Audio Teaser (Right) */}
-                <div className="lg:col-span-5 space-y-4">
-                  <div className="aspect-4/5 rounded-2xl bg-gradient-to-br from-[#E8F5F4] to-slate-200 border border-slate-200/80 overflow-hidden relative flex flex-col justify-between p-6 shadow-inner">
-                    <div className="flex items-center justify-between">
-                      <span className="bg-white/90 backdrop-blur-md text-[#118F86] text-xs font-bold px-3 py-1 rounded-full border border-slate-200">
-                        معلم معتمد ومفحوص
-                      </span>
-                      <Star size={16} className="text-[#FFC77A] fill-[#FFC77A]" />
-                    </div>
-
-                    <div className="text-center py-6">
-                      <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-full bg-white mx-auto shadow-md border-4 border-[#118F86]/20 flex items-center justify-center text-3xl font-bold text-[#118F86]">
-                        {editorialTeachers[selectedTeacherIndex].name.slice(0, 1)}
-                      </div>
-                      <h3 className="text-xl font-bold text-[#16344B] mt-3">
-                        {editorialTeachers[selectedTeacherIndex].name}
-                      </h3>
-                      <p className="text-xs text-[#566974] mt-0.5">
-                        {editorialTeachers[selectedTeacherIndex].role}
-                      </p>
-                    </div>
-
-                    <div className="bg-white/90 backdrop-blur-xs rounded-xl p-3 border border-slate-200/60 text-center">
-                      <span className="text-[11px] text-slate-500 font-medium block mb-1">
-                        عينة من نبرة الحديث بالحصة:
-                      </span>
-                      <p className="text-xs font-bold text-[#16344B] font-sans">
-                        "{editorialTeachers[selectedTeacherIndex].previewAudio}"
-                      </p>
-                    </div>
-                  </div>
-
-                  <StagingAssetBadge
-                    label={`بورتريه ${editorialTeachers[selectedTeacherIndex].name}`}
-                    note="تُعرض الصورة الشخصية الفوتوغرافية الحقيقية المعتمدة في النسخة المنشورة."
-                  />
-                </div>
-
-                {/* Teacher Editorial Details & Philosophy (Left) */}
-                <div className="lg:col-span-7 space-y-6">
-                  {/* Philosophy Quote */}
-                  <div className="relative pl-4 border-r-4 border-[#118F86] pr-4 py-1">
-                    <span className="text-xs font-bold text-[#118F86] block mb-1">فلسفة التدريس:</span>
-                    <blockquote className="text-lg sm:text-xl font-bold text-[#16344B] leading-relaxed">
-                      "{editorialTeachers[selectedTeacherIndex].quote}"
-                    </blockquote>
-                  </div>
-
-                  {/* Highlights Grid */}
-                  <div className="grid grid-cols-2 gap-3 text-xs">
-                    <div className="p-3 bg-white rounded-xl border border-slate-200">
-                      <span className="text-slate-400 block mb-0.5">الخبرة:</span>
-                      <span className="font-bold text-[#16344B]">{editorialTeachers[selectedTeacherIndex].experience}</span>
-                    </div>
-                    <div className="p-3 bg-white rounded-xl border border-slate-200">
-                      <span className="text-slate-400 block mb-0.5">الأسلوب واللهجة:</span>
-                      <span className="font-bold text-[#16344B]">{editorialTeachers[selectedTeacherIndex].accent}</span>
-                    </div>
-                  </div>
-
-                  {/* Tags */}
-                  <div>
-                    <span className="text-xs font-bold text-[#16344B] block mb-2">مميزات أسلوب هذا المعلم:</span>
-                    <div className="flex flex-wrap gap-2">
-                      {editorialTeachers[selectedTeacherIndex].tags.map((tag, tIdx) => (
-                        <span key={tIdx} className="bg-white px-3 py-1.5 rounded-xl border border-slate-200 text-xs text-[#566974] font-medium">
-                          ✓ {tag}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Book with this teacher CTA */}
-                  <div className="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
-                    <motion.button
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
-                      onClick={() => onOpenTrialModal(`home-teacher-${editorialTeachers[selectedTeacherIndex].name}`)}
-                      className="bg-[#118F86] hover:bg-[#0E736C] text-white text-xs sm:text-sm font-bold px-6 py-3.5 rounded-xl shadow-accent inline-flex items-center justify-center gap-2 transition-all"
-                    >
-                      <Sparkles size={15} className="text-[#FFC77A]" />
-                      <span>احجزوا حصة تجريبية مع {editorialTeachers[selectedTeacherIndex].name}</span>
-                    </motion.button>
-
-                    <Link
-                      to="/teachers"
-                      className="text-xs font-bold text-[#118F86] hover:underline text-center py-2 sm:py-0"
-                    >
-                      تعرّفوا على باقي المعلمين (12 معلم) ←
-                    </Link>
-                  </div>
-                </div>
-              </motion.div>
-            </AnimatePresence>
-
-            {/* Teacher Switch Guarantee Banner */}
-            <div className="mt-8 pt-6 border-t border-slate-200/80 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[#566974]">
-              <div className="flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-full bg-[#E8F5F4] text-[#118F86] flex items-center justify-center shrink-0">
-                  <RefreshCw size={16} />
-                </div>
-                <span>
-                  <strong>ضمان الراحة التامة:</strong> إذا طفلك ما ارتاح لأسلوب المعلم لأي سبب، بتبعتولنا رسالة على واتساب وبنبدله فوراً وبدون أي إحراج.
-                </span>
-              </div>
-              <span className="font-bold text-[#118F86] shrink-0">مرونة كاملة 100%</span>
-            </div>
-
-          </div>
-
-        </div>
-      </section>
-
-      {/* =========================================================================
-          TRANSITION 3 -> 4: Fluid Organic Wave
-      ========================================================================= */}
-      <SectionWaveDivider fillColor="#FBFBF9" accentStroke="#118F86" heightClass="h-10 sm:h-14 md:h-20" />
-
-      {/* =========================================================================
-          SCENE 4: VISUAL HOW LEARNING WORKS (Continuous Storyboard Scene 4)
-          Connected 4-step progress arc from WhatsApp message to fluent confidence
-      ========================================================================= */}
-      <section className="py-16 md:py-24 bg-[#FBFBF9] text-right relative">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          
-          <FadeIn className="text-center max-w-3xl mx-auto mb-14">
-            <span className="text-xs font-bold text-[#118F86] block mb-2 tracking-wide">
-              رحلة واضحة وسهلة
-            </span>
-            <h2 className="text-2xl sm:text-4xl font-extrabold text-[#16344B] leading-tight">
-              4 خطوات بسيطة… <br />
-              <span className="text-[#118F86]">من أول رسالة واتساب لحد أول جملة كاملة</span>
-            </h2>
-            <p className="text-sm sm:text-base text-[#566974] mt-3 leading-relaxed">
-              بدون معاملات معقدة ولا بطاقات ائتمان مسبقة. كل إشي بتم عبر محادثة ودية ومتابعة مستمرة.
-            </p>
-          </FadeIn>
-
-          {/* 4 Connected Step Cards */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 relative">
-            
-            {[
-              {
-                step: '01',
-                title: 'محادثة سريعة على واتساب',
-                desc: 'بنسألكم عن عمر طفلكم، مستواه الحالي، ومواعيدكم المناسبة بكل ود وسرعة.',
-                highlight: 'بدون أي نموذج تسجيل معقد',
-                icon: MessageCircle,
-              },
-              {
-                step: '02',
-                title: 'حصة تجريبية مجانية 1:1',
-                desc: 'طفلكم بقابل المعلم أونلاين 25 دقيقة، وببلش يحكي ويتدرب من أول دقيقة بدون خوف.',
-                highlight: 'مجانية 100% وبدون التزام',
-                icon: Sparkles,
-              },
-              {
-                step: '03',
-                title: 'تقرير مفصل وتوصية للأهل',
-                desc: 'بنبعث للأهل رسالة واتساب واضحة بمستوى الطفل، نقاط قوته، والخطة المقترحة.',
-                highlight: 'شفافية كاملة للأهالي',
-                icon: Award,
-              },
-              {
-                step: '04',
-                title: 'بتكملوا بالباقة اللي بتناسبكم',
-                desc: 'حرية اختيار الباقة مع إمكانية مشاركة نفس الرصيد بين جميع الإخوة في البيت.',
-                highlight: 'رصيد عائلي مرن وتبديل معلمين',
-                icon: HeartHandshake,
-              },
-            ].map((item, idx) => (
-              <FadeIn key={idx} delay={idx * 0.1} duration={0.45}>
-                <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-soft h-full flex flex-col justify-between relative group hover:border-[#118F86] transition-all">
-                  <div>
-                    <div className="flex items-center justify-between mb-4">
-                      <div className="w-10 h-10 rounded-2xl bg-[#E8F5F4] text-[#118F86] flex items-center justify-center font-bold text-sm">
-                        <item.icon size={20} />
-                      </div>
-                      <span className="text-2xl font-black text-slate-200 group-hover:text-[#118F86]/30 transition-colors">
-                        {item.step}
-                      </span>
-                    </div>
-
-                    <h3 className="text-base font-bold text-[#16344B] mb-2 leading-snug">
-                      {item.title}
-                    </h3>
-
-                    <p className="text-xs text-[#566974] leading-relaxed mb-4">
-                      {item.desc}
-                    </p>
-                  </div>
-
-                  <span className="text-[11px] font-bold text-[#118F86] bg-[#E8F5F4] px-2.5 py-1 rounded-md inline-block text-center">
-                    {item.highlight}
-                  </span>
-                </div>
-              </FadeIn>
-            ))}
-
-          </div>
-
-          {/* Action beneath steps */}
-          <div className="mt-10 text-center">
-            <motion.button
-              whileHover={{ scale: 1.03 }}
-              whileTap={{ scale: 0.97 }}
-              onClick={() => onOpenTrialModal('home-roadmap-cta')}
-              className="bg-[#118F86] hover:bg-[#0E736C] text-white text-sm font-bold px-8 py-3.5 rounded-2xl shadow-accent inline-flex items-center gap-2 transition-all"
-            >
-              <span>ابدأوا الخطوة الأولى مجاناً الآن</span>
-              <ArrowRight size={15} className="rotate-180" />
-            </motion.button>
-          </div>
-
-        </div>
-      </section>
-
-      {/* =========================================================================
-          TRANSITION 4 -> 5: Soft Wave into Testimonials Canvas
-      ========================================================================= */}
-      <SectionWaveDivider fillColor="#F7F9F6" accentStroke="#FFC77A" heightClass="h-10 sm:h-14 md:h-20" />
-
-      {/* =========================================================================
-          SCENE 5: REAL PARENTS STORIES (Continuous Storyboard Scene 5)
-          Authentic Arab 48 Parent Voice with child details & tangible outcomes
-      ========================================================================= */}
-      <section className="py-16 md:py-24 bg-[#F7F9F6] text-right relative">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          
-          <FadeIn className="text-center max-w-3xl mx-auto mb-12 sm:mb-16">
-            <span className="text-xs font-bold text-[#118F86] block mb-2 tracking-wide">
-              تجارب أهالي حقيقية
-            </span>
-            <h2 className="text-2xl sm:text-4xl font-extrabold text-[#16344B] leading-tight">
-              اسمعوا من أهالي شاركونا نفس التجربة: <br />
-              <span className="text-[#118F86]">كيف تغيّرت ثقة أولادهم بعد كم أسبوع؟</span>
-            </h2>
-            <p className="text-sm sm:text-base text-[#566974] mt-3 leading-relaxed">
-              شهادات وتجارب موثقة من أهالي في حيفا، الناصرة، القدس، والمثلث بموافقة أصحابها الكاملة.
-            </p>
-          </FadeIn>
-
-          {/* Interactive Carousel */}
-          <TestimonialsCarousel />
-
-          <div className="mt-8 text-center">
-            <p className="text-xs text-slate-400">
-              جميع القصص والتجارب المعروضة حقيقية 100% وموثقة بموافقة أصحابها الكاملة بدون أي تزييف أو ادعاءات غير مؤكدة.
-            </p>
-          </div>
-
-        </div>
-      </section>
-
-      {/* =========================================================================
-          TRANSITION 5 -> 6: Organic Wave into Family Wallet
-      ========================================================================= */}
-      <SectionWaveDivider fillColor="#FFFFFF" accentStroke="#118F86" heightClass="h-10 sm:h-14 md:h-20" />
-
-      {/* =========================================================================
-          SCENE 6: FAMILY WALLET IN FAMILY CONTEXT (Continuous Storyboard Scene 6)
-          Shared credit dynamic for multiple siblings with interactive allocation slider
-      ========================================================================= */}
-      <section className="py-16 md:py-24 bg-white text-right relative">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          
-          <FadeIn className="text-center max-w-3xl mx-auto mb-12">
-            <span className="text-xs font-bold text-[#118F86] block mb-2 tracking-wide">
-              ميزة حصرية ومرنة للعائلات
-            </span>
-            <h2 className="text-2xl sm:text-4xl font-extrabold text-[#16344B] leading-tight">
-              عندك أكثر من طفل؟ <br />
-              <span className="text-[#118F86]">رصيد واحد بكفي الجميع وبكل حرية</span>
-            </h2>
-            <p className="text-sm sm:text-base text-[#566974] mt-3 leading-relaxed">
-              ما في داعي تشتري باقة مستقلة لكل ولد. اشتري باقة واحدة من حساب ولي الأمر، ووزّع الحصص بين أولادك حسب حاجة كل واحد، مع تقرير متابعة منفصل لكل طفل.
-            </p>
-          </FadeIn>
-
-          {/* Live Interactive Family Wallet Demo */}
-          <FamilyWalletDemo />
-
-        </div>
-      </section>
-
-      {/* =========================================================================
-          TRANSITION 6 -> 7: Soft Wave into Transparent Plans
-      ========================================================================= */}
-      <SectionWaveDivider fillColor="#F8FAFB" accentStroke="#FFC77A" heightClass="h-10 sm:h-14 md:h-20" />
-
-      {/* =========================================================================
-          SCENE 7: STREAMLINED TRANSPARENT PLANS (Continuous Storyboard Scene 7)
-          15, 25, 50, 100 lesson tiers with transparent per-lesson economics
-      ========================================================================= */}
-      <section id="pricing" className="py-16 md:py-24 bg-[#F8FAFB] text-right relative">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          
-          <FadeIn className="text-center max-w-3xl mx-auto mb-12 sm:mb-16">
-            <span className="text-xs font-bold text-[#118F86] block mb-2 tracking-wide">
-              خطط وأسعار واضحة
-            </span>
-            <h2 className="text-2xl sm:text-4xl font-extrabold text-[#16344B] leading-tight">
-              استثمار بسيط في ثقة طفلك ومستقبله: <br />
-              <span className="text-[#118F86]">حصص 25 دقيقة الفردية بدون التزامات خفية</span>
-            </h2>
-            <p className="text-sm sm:text-base text-[#566974] mt-3 leading-relaxed">
-              رصيد عائلي مشترك • حرية تبديل المعلم • ترتيب الحصص بمرونة عبر واتساب
-            </p>
-          </FadeIn>
-
-          {/* 3 Core Flagship Plans */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 max-w-6xl mx-auto">
-            
-            {/* 15 Lessons Starter */}
-            <FadeIn delay={0.1}>
-              <div className="bg-white rounded-3xl p-7 border border-slate-200 shadow-soft h-full flex flex-col justify-between">
                 <div>
-                  <span className="text-xs font-bold text-slate-500 bg-slate-100 px-3 py-1 rounded-full inline-block mb-3">
-                    الأنسب كبداية وتجربة
-                  </span>
-                  <h3 className="text-xl font-bold text-[#16344B] mb-1">باقة البداية</h3>
-                  <div className="my-4 pb-4 border-b border-slate-100">
-                    <div className="flex items-baseline gap-1">
-                      <span className="text-3xl sm:text-4xl font-black text-[#16344B]">390</span>
-                      <span className="text-sm font-bold text-slate-500">₪</span>
-                    </div>
-                    <span className="text-xs text-[#118F86] font-bold block mt-1">
-                      15 حصة فردية (26 ₪ للحصة)
-                    </span>
+                  <div className="aspect-square rounded-2xl bg-gradient-to-br from-[#E8F5F4] to-slate-200 flex items-center justify-center text-3xl font-black text-[#118F86] mb-4 shadow-inner">
+                    {teacher.name.slice(0, 1)}
                   </div>
 
-                  <ul className="space-y-2.5 text-xs text-[#566974] mb-6">
-                    <li className="flex items-center gap-2">
-                      <CheckCircle2 size={15} className="text-[#118F86] shrink-0" />
-                      <span>15 حصة خاصة 1:1 مع مدرس مباشر</span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <CheckCircle2 size={15} className="text-[#118F86] shrink-0" />
-                      <span>إمكانية مشاركة الرصيد بين الأبناء</span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <CheckCircle2 size={15} className="text-[#118F86] shrink-0" />
-                      <span>حرية اختيار وتغيير المدرس</span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <CheckCircle2 size={15} className="text-[#118F86] shrink-0" />
-                      <span>تقارير متابعة دورية للأهل</span>
-                    </li>
-                  </ul>
-                </div>
+                  <h3 className="text-lg font-black text-[#16344B]">{teacher.name}</h3>
+                  <span className="text-xs text-[#118F86] font-bold block mb-2">{teacher.role}</span>
 
-                <motion.button
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  onClick={() => onOpenTrialModal('home-pricing-15')}
-                  className="w-full py-3.5 bg-slate-100 hover:bg-slate-200 text-[#16344B] text-xs font-bold rounded-2xl transition-colors text-center"
-                >
-                  احجزوا الباقة عبر واتساب
-                </motion.button>
-              </div>
-            </FadeIn>
-
-            {/* 25 Lessons Progress (Featured Best-Seller) */}
-            <FadeIn delay={0.18}>
-              <div className="bg-white rounded-3xl p-7 border-2 border-[#118F86] ring-4 ring-[#118F86]/10 shadow-lifted h-full flex flex-col justify-between relative">
-                <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-[#118F86] text-white text-[11px] font-bold px-4 py-1 rounded-full shadow-md">
-                  الخيار الأكثر توازناً للتقدّم ★
-                </div>
-
-                <div>
-                  <span className="text-xs font-bold text-[#118F86] bg-[#E8F5F4] px-3 py-1 rounded-full inline-block mb-3 mt-1">
-                    توفير واستمرارية
-                  </span>
-                  <h3 className="text-xl font-bold text-[#16344B] mb-1">باقة التقدّم</h3>
-                  <div className="my-4 pb-4 border-b border-slate-100">
-                    <div className="flex items-baseline gap-1">
-                      <span className="text-3xl sm:text-4xl font-black text-[#118F86]">600</span>
-                      <span className="text-sm font-bold text-slate-500">₪</span>
-                    </div>
-                    <span className="text-xs text-[#118F86] font-bold block mt-1">
-                      25 حصة فردية (24 ₪ للحصة فقط)
-                    </span>
-                  </div>
-
-                  <ul className="space-y-2.5 text-xs text-[#566974] mb-6">
-                    <li className="flex items-center gap-2">
-                      <CheckCircle2 size={15} className="text-[#118F86] shrink-0" />
-                      <span><strong>25 حصة فردية 1:1</strong> مخصصة بالكامل</span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <CheckCircle2 size={15} className="text-[#118F86] shrink-0" />
-                      <span><strong>مشاركة الرصيد</strong> بين الإخوة بحرية</span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <CheckCircle2 size={15} className="text-[#118F86] shrink-0" />
-                      <span>أولوية في تثبيت المواعيد الأسبوعية</span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <CheckCircle2 size={15} className="text-[#118F86] shrink-0" />
-                      <span>متابعة مستمرة بعد كل درس</span>
-                    </li>
-                  </ul>
-                </div>
-
-                <motion.button
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  onClick={() => onOpenTrialModal('home-pricing-25')}
-                  className="w-full py-3.5 bg-[#118F86] hover:bg-[#0E736C] text-white text-xs font-bold rounded-2xl shadow-accent transition-all text-center"
-                >
-                  احجزوا باقة التقدّم الآن
-                </motion.button>
-              </div>
-            </FadeIn>
-
-            {/* 50 Lessons Continuity */}
-            <FadeIn delay={0.25}>
-              <div className="bg-white rounded-3xl p-7 border border-slate-200 shadow-soft h-full flex flex-col justify-between">
-                <div>
-                  <span className="text-xs font-bold text-amber-800 bg-amber-100 px-3 py-1 rounded-full inline-block mb-3">
-                    لبناء طلاقة مستدامة
-                  </span>
-                  <h3 className="text-xl font-bold text-[#16344B] mb-1">باقة الاستمرار</h3>
-                  <div className="my-4 pb-4 border-b border-slate-100">
-                    <div className="flex items-baseline gap-1">
-                      <span className="text-3xl sm:text-4xl font-black text-[#16344B]">1,000</span>
-                      <span className="text-sm font-bold text-slate-500">₪</span>
-                    </div>
-                    <span className="text-xs text-[#118F86] font-bold block mt-1">
-                      50 حصة فردية (20 ₪ للحصة — توفير 30%)
-                    </span>
-                  </div>
-
-                  <ul className="space-y-2.5 text-xs text-[#566974] mb-6">
-                    <li className="flex items-center gap-2">
-                      <CheckCircle2 size={15} className="text-[#118F86] shrink-0" />
-                      <span>50 حصة فردية لبناء عادة لغوية قوية</span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <CheckCircle2 size={15} className="text-[#118F86] shrink-0" />
-                      <span>سعر مميّز للحصة (20 ₪ فقط)</span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <CheckCircle2 size={15} className="text-[#118F86] shrink-0" />
-                      <span>توزيع مرن بين جميع أبناء العائلة</span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <CheckCircle2 size={15} className="text-[#118F86] shrink-0" />
-                      <span>خطة متابعة تدريجية للمستوى المتقدم</span>
-                    </li>
-                  </ul>
-                </div>
-
-                <motion.button
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  onClick={() => onOpenTrialModal('home-pricing-50')}
-                  className="w-full py-3.5 bg-slate-100 hover:bg-slate-200 text-[#16344B] text-xs font-bold rounded-2xl transition-colors text-center"
-                >
-                  احجزوا باقة الاستمرار عبر واتساب
-                </motion.button>
-              </div>
-            </FadeIn>
-
-          </div>
-
-          {/* Legal policy review banner */}
-          <div className="mt-10 text-center max-w-xl mx-auto">
-            <PolicyReviewTag text="بند استرداد الأموال خلال 14 يوماً خاضع للمراجعة القانونية قبل الإطلاق [POLICY_REVIEW]" />
-          </div>
-
-        </div>
-      </section>
-
-      {/* =========================================================================
-          TRANSITION 7 -> 8: Dramatic Deep Ocean Wave Sweep
-      ========================================================================= */}
-      <SectionWaveDivider fillColor="#16344B" accentStroke="#FFC77A" heightClass="h-12 sm:h-18 md:h-28" />
-
-      {/* =========================================================================
-          SCENE 8: EMOTIONAL PRESENTER CLOSING CTA & FAQ DRAWER (Scene 8)
-          Deep ocean #16344B closing bookend with presenter anchor & instant WhatsApp trial
-      ========================================================================= */}
-      <section className="pt-12 pb-20 md:pt-16 md:pb-28 bg-[#16344B] text-white relative text-right">
-        <AnimatedConversationalArc opacity={0.18} />
-
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 relative z-10">
-          
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center mb-16">
-            
-            {/* Closing Presenter Anchor (Right in RTL) */}
-            <div className="lg:col-span-5 order-2 lg:order-1">
-              <FadeIn direction="right">
-                <div className="bg-white/10 backdrop-blur-md rounded-3xl p-6 border border-white/15 relative overflow-hidden text-right space-y-4 shadow-lifted">
-                  <div className="flex items-center gap-3">
-                    <div className="w-12 h-12 rounded-full bg-[#118F86] text-white flex items-center justify-center font-bold text-lg border-2 border-white/30 shrink-0">
-                      ن
-                    </div>
-                    <div>
-                      <h4 className="text-sm font-bold text-white">رسالة ختامية من فريق NovaTova</h4>
-                      <p className="text-xs text-slate-300">لأولياء الأمور الحريصين على مستقبل أولادهم</p>
-                    </div>
-                  </div>
-
-                  <blockquote className="text-sm text-slate-200 leading-relaxed italic border-r-2 border-[#FFC77A] pr-3">
-                    "كل رحلة طلاقة بتبدأ بكلمة وحدة. ابنكم عنده القدرة الكاملة، وبس محتاج بيئة صبورة تطمنه وتخليه يحكي بدون خوف. جرّبوا حصة وحدة وشوفوا كيف رح تتغير نظرته للغة."
+                  <blockquote className="text-xs text-[#566974] leading-relaxed mb-4 italic">
+                    "{teacher.quote}"
                   </blockquote>
 
-                  <div className="pt-2 flex items-center justify-between text-xs text-slate-300 border-t border-white/10">
-                    <span>حصة تجريبية مجانية 100%</span>
-                    <span className="text-[#FFC77A] font-bold">بدون أي التزام</span>
-                  </div>
-                </div>
-              </FadeIn>
-            </div>
-
-            {/* Closing Action Content (Left in RTL) */}
-            <div className="lg:col-span-7 space-y-6 order-1 lg:order-2">
-              <FadeIn>
-                <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 text-[#FFC77A] text-xs font-bold border border-white/15">
-                  <Sparkles size={14} />
-                  <span>أول خطوة أسهل مما بتتخيلوا</span>
+                  <span className="inline-block text-[11px] font-bold text-slate-600 bg-white px-2.5 py-1 rounded-md border border-slate-200 mb-4">
+                    {teacher.tag}
+                  </span>
                 </div>
 
-                <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black leading-tight tracking-tight mt-3">
-                  جاهزين نبلّش؟ <br />
-                  <span className="text-[#FFC77A]">احجزوا حصة تجريبية مجانية لطفلكم الآن</span>
-                </h2>
-
-                <p className="text-base text-slate-300 leading-relaxed max-w-xl">
-                  احكولنا مين بدّه يتعلّم وشو هدفه، وفريقنا بجهّز موعد الحصة معكم خطوة بخطوة عبر محادثة ودية وسريعة على واتساب.
-                </p>
-
-                <div className="pt-4 flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5">
-                  <motion.button
-                    whileHover={{ scale: 1.03, y: -2 }}
-                    whileTap={{ scale: 0.97 }}
-                    onClick={() => onOpenTrialModal('home-closing-cta')}
-                    className="bg-[#118F86] hover:bg-[#0E736C] text-white text-base font-bold px-8 py-4 rounded-2xl shadow-accent flex items-center justify-center gap-2.5 transition-all tap-target-min"
-                  >
-                    <Sparkles size={18} className="text-[#FFC77A]" />
-                    <span>احجزوا حصة تجريبية مجانية الآن</span>
-                  </motion.button>
-
-                  <a
-                    href="https://wa.me/972500000000?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%20NovaTova%D8%8C%20%D8%B9%D9%86%D8%AF%D9%8A%20%D8%A7%D8%B3%D8%AA%D9%81%D8%B3%D8%A7%D8%B1%20%D8%B9%D9%86%20%D8%A7%D9%84%D8%AD%D8%B5%D8%B5%20%D8%A7%D9%84%D8%AA%D8%AC%D8%B1%D9%8A%D8%A8%D9%8A%D8%A9"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="bg-white/10 hover:bg-white/15 text-white border border-white/20 text-sm font-bold px-6 py-4 rounded-2xl flex items-center justify-center gap-2 transition-all tap-target-min"
-                  >
-                    <MessageCircle size={16} />
-                    <span>تواصلوا معنا مباشرة على واتساب</span>
-                  </a>
-                </div>
-              </FadeIn>
-            </div>
-
+                <motion.button
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  onClick={() => onOpenTrialModal(`scene-teacher-${teacher.name}`)}
+                  className="w-full py-2.5 bg-[#118F86] hover:bg-[#0E736C] text-white text-xs font-bold rounded-xl transition-colors shadow-xs"
+                >
+                  احجزوا تجربة مع {teacher.name}
+                </motion.button>
+              </div>
+            ))}
           </div>
 
-          {/* Expandable Quick FAQ Drawer */}
-          <div className="pt-12 border-t border-white/10 max-w-3xl mx-auto">
-            <h3 className="text-lg font-bold text-white text-center mb-6">
-              إجابات سريعة قبل الحجز
-            </h3>
-
-            <div className="space-y-3">
-              {homeFaqs.map((faq, idx) => (
-                <div key={idx} className="bg-white/5 rounded-2xl border border-white/10 overflow-hidden">
-                  <button
-                    type="button"
-                    onClick={() => setOpenFaq(openFaq === idx ? null : idx)}
-                    className="w-full p-4 sm:p-5 text-right font-bold text-sm text-white flex items-center justify-between gap-3 hover:bg-white/10 transition-colors"
-                  >
-                    <span>{faq.q}</span>
-                    <ChevronDown
-                      size={16}
-                      className={`text-[#FFC77A] transition-transform duration-200 ${openFaq === idx ? 'rotate-180' : ''}`}
-                    />
-                  </button>
-                  <AnimatePresence>
-                    {openFaq === idx && (
-                      <motion.div
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: 'auto', opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
-                        transition={{ duration: 0.25 }}
-                        className="overflow-hidden"
-                      >
-                        <div className="p-4 sm:p-5 pt-0 text-xs text-slate-300 leading-relaxed border-t border-white/10">
-                          {faq.a}
-                        </div>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </div>
-              ))}
-            </div>
-
-            <div className="mt-8 text-center">
-              <Link to="/faq" className="text-xs font-bold text-[#FFC77A] hover:underline">
-                عرض جميع الأسئلة الشائعة (28 سؤال) ←
-              </Link>
-            </div>
+          <div className="mt-8 text-center text-xs text-[#566974] flex items-center justify-center gap-2">
+            <RefreshCw size={14} className="text-[#118F86]" />
+            <span>بتقدروا تبدلوا المعلم بأي وقت بكل سهولة وبدون أي إحراج.</span>
           </div>
 
         </div>
       </section>
 
-      {/* Video Modal for Full Lesson & Presenter Viewing */}
+      {/* =========================================================================
+          TRANSITION 3 -> 4: Wave into Student Progress
+      ========================================================================= */}
+      <SectionWaveDivider fillColor="#FBFBF9" accentStroke="#118F86" heightClass="h-10 sm:h-14 md:h-18" />
+
+      {/* =========================================================================
+          SCENE 4: WATCH REAL PROGRESS (كل حصة، خطوة لقدّام)
+          One headline + one 8-word support sentence + 3 clear milestones
+      ========================================================================= */}
+      <section className="py-14 md:py-24 bg-[#FBFBF9] text-right relative">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6">
+          
+          <FadeIn className="text-center max-w-2xl mx-auto mb-10">
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-[#16344B] tracking-tight">
+              كل حصة، خطوة لقدّام.
+            </h2>
+            <p className="text-base text-[#566974] mt-2 font-medium">
+              من كلمات متفرقة إلى جملة كاملة ومحادثة واثقة.
+            </p>
+          </FadeIn>
+
+          {/* 3 Milestones */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            
+            <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-soft">
+              <span className="text-xs font-black text-[#118F86] bg-[#E8F5F4] px-3 py-1 rounded-full inline-block mb-3">
+                الحصة الأولى
+              </span>
+              <h3 className="text-base font-black text-[#16344B] mb-2">كسر حاجز الخوف</h3>
+              <p className="text-xs text-[#566974] leading-relaxed">
+                الطفل يتعرف على المعلم، ويشعر بالأمان التام، وينطق أولى الكلمات بحرية وبدون قلق.
+              </p>
+            </div>
+
+            <div className="bg-white p-6 rounded-3xl border-2 border-[#118F86] shadow-soft ring-4 ring-[#118F86]/10">
+              <span className="text-xs font-black text-white bg-[#118F86] px-3 py-1 rounded-full inline-block mb-3">
+                بعد 5 حصص
+              </span>
+              <h3 className="text-base font-black text-[#16344B] mb-2">تكوين جمل كاملة</h3>
+              <p className="text-xs text-[#566974] leading-relaxed">
+                الانتقال من الإجابة بكلمة واحدة إلى تركيب جمل حية عن هواياته ويومه المدرسي.
+              </p>
+            </div>
+
+            <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-soft">
+              <span className="text-xs font-black text-[#118F86] bg-[#E8F5F4] px-3 py-1 rounded-full inline-block mb-3">
+                بعد 15 حصة
+              </span>
+              <h3 className="text-base font-black text-[#16344B] mb-2">طلاقة ومشاركة بالصف</h3>
+              <p className="text-xs text-[#566974] leading-relaxed">
+                رفع اليد في المدرسة بثقة، ومحادثة واقعية دون تلعثم أو خوف من الخطأ.
+              </p>
+            </div>
+
+          </div>
+
+          {/* Real teacher feedback quote */}
+          <div className="mt-8 max-w-xl mx-auto p-4 bg-white rounded-2xl border border-slate-200 text-center text-xs text-[#16344B]">
+            <span className="text-slate-400 block mb-1">من تقرير المعلم بعد الحصة:</span>
+            <strong>"آدم تشجع وصار يحكي جملة كاملة بدون تردد وبفخر كبير."</strong>
+          </div>
+
+        </div>
+      </section>
+
+      {/* =========================================================================
+          TRANSITION 4 -> 5: Soft Wave into Testimonials
+      ========================================================================= */}
+      <SectionWaveDivider fillColor="#F7F9F6" accentStroke="#FFC77A" heightClass="h-10 sm:h-14 md:h-18" />
+
+      {/* =========================================================================
+          SCENE 5: REAL FAMILIES, REAL EXPERIENCES (اسمعوا من الأهالي)
+          One headline + one 10-word support sentence + authentic testimonial gallery
+      ========================================================================= */}
+      <section className="py-14 md:py-24 bg-[#F7F9F6] text-right relative">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6">
+          
+          <FadeIn className="text-center max-w-2xl mx-auto mb-10">
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-[#16344B] tracking-tight">
+              اسمعوا من الأهالي.
+            </h2>
+            <p className="text-base text-[#566974] mt-2 font-medium">
+              تجارب موثقة من أمهات وآباء لاحظوا الفرق في ثقة أولادهم.
+            </p>
+          </FadeIn>
+
+          {/* Genuine Testimonial Carousel */}
+          <TestimonialsCarousel />
+
+        </div>
+      </section>
+
+      {/* =========================================================================
+          TRANSITION 5 -> 6: Wave into Family Learning
+      ========================================================================= */}
+      <SectionWaveDivider fillColor="#FFFFFF" accentStroke="#118F86" heightClass="h-10 sm:h-14 md:h-18" />
+
+      {/* =========================================================================
+          SCENE 6: FAMILY LEARNING (باقة وحدة لكل أولادك)
+          One headline + one 8-word support sentence + interactive Family Wallet
+      ========================================================================= */}
+      <section className="py-14 md:py-24 bg-white text-right relative">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6">
+          
+          <FadeIn className="text-center max-w-2xl mx-auto mb-10">
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-[#16344B] tracking-tight">
+              باقة وحدة لكل أولادك.
+            </h2>
+            <p className="text-base text-[#566974] mt-2 font-medium">
+              رصيد حصص مشترك توزعه بين الأبناء بكل حرية.
+            </p>
+          </FadeIn>
+
+          {/* Interactive Family Wallet Demonstration */}
+          <FamilyWalletDemo />
+
+          <div className="mt-8 text-center">
+            <Link to="/pricing" className="text-xs font-bold text-[#118F86] hover:underline">
+              عرض تفاصيل جميع الباقات وحصص الـ 55 دقيقة ←
+            </Link>
+          </div>
+
+        </div>
+      </section>
+
+      {/* =========================================================================
+          TRANSITION 6 -> 7: Dramatic Deep Ocean Wave Sweep
+      ========================================================================= */}
+      <SectionWaveDivider fillColor="#16344B" accentStroke="#FFC77A" heightClass="h-12 sm:h-18 md:h-24" />
+
+      {/* =========================================================================
+          SCENE 7: FINAL HUMAN CTA (جاهزين نبلّش؟)
+          One headline + one 8-word support sentence + Presenter bookend
+      ========================================================================= */}
+      <section className="py-16 md:py-24 bg-[#16344B] text-white text-right relative">
+        <AnimatedConversationalArc opacity={0.18} />
+
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 relative z-10">
+          
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+            
+            {/* Presenter Visual Closing Anchor (5 cols) */}
+            <div className="lg:col-span-5 order-2 lg:order-1" data-asset-slot="presenter-closing">
+              <div className="bg-white/10 backdrop-blur-md rounded-3xl p-6 border border-white/15 text-right space-y-3">
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 rounded-full bg-[#118F86] text-white flex items-center justify-center font-bold text-lg border-2 border-white/30">
+                    ن
+                  </div>
+                  <div>
+                    <h4 className="text-sm font-bold text-white">وجه NovaTova للأهالي</h4>
+                    <p className="text-xs text-slate-300">معكم خطوة بخطوة</p>
+                  </div>
+                </div>
+
+                <blockquote className="text-xs text-slate-200 leading-relaxed italic border-r-2 border-[#FFC77A] pr-3">
+                  "خطوة صغيرة منك اليوم بتعطي ابنك ثقة بتضل معه طول العمر. خلّينا نبلّش سوا بحصة تجريبية مجانية."
+                </blockquote>
+              </div>
+            </div>
+
+            {/* Closing Actions (7 cols) */}
+            <div className="lg:col-span-7 space-y-5 order-1 lg:order-2">
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight">
+                جاهزين نبلّش؟
+              </h2>
+
+              <p className="text-base text-slate-300 font-medium">
+                احجزوا حصة تجريبية مجانية 100% بدون أي التزام.
+              </p>
+
+              <div className="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5">
+                <motion.button
+                  whileHover={{ scale: 1.03, y: -2 }}
+                  whileTap={{ scale: 0.97 }}
+                  onClick={() => onOpenTrialModal('final-human-cta')}
+                  className="bg-[#118F86] hover:bg-[#0E736C] text-white text-base font-black px-8 py-4 rounded-2xl shadow-accent flex items-center justify-center gap-2.5 tap-target-min transition-all"
+                >
+                  <Sparkles size={18} className="text-[#FFC77A]" />
+                  <span>احجزوا حصة مجانية</span>
+                </motion.button>
+
+                <a
+                  href="https://wa.me/972500000000?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%20NovaTova%D8%8C%20%D8%AD%D8%A7%D8%A8%D8%A8%20%D8%A3%D8%AD%D8%AC%D8%B2%20%D8%AD%D8%B5%D8%A9%20%D8%AA%D8%AC%D8%B1%D9%8A%D8%A8%D9%8A%D8%A9%20%D9%85%D8%AC%D8%A7%D9%86%D9%8A%D8%A9"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="bg-white/10 hover:bg-white/15 text-white border border-white/20 text-sm font-bold px-6 py-4 rounded-2xl flex items-center justify-center gap-2 transition-all tap-target-min"
+                >
+                  <MessageCircle size={16} />
+                  <span>تحدثوا معنا على واتساب</span>
+                </a>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </section>
+
+      {/* Video Modal for Real Lesson Video */}
       <VideoModal isOpen={videoModalOpen} onClose={() => setVideoModalOpen(false)} />
 
     </div>
